@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "WaveFox vertical tabs",
+  "description": "Not now",
+  "version": "0.0.1",
+  "permissions": ["activeTab", "tabs", "theme"],
+
+  "icons": {
+    "64": "icons/icon.png"
+  },
+
+  "sidebar_action":
+  {
+    "default_title": "WaveFox Vertical Tabs",
+    "default_panel": "sidebar/sidebar.html",
+    "default_icon": "sidebar_icon.png",
+    "browser_style": false
+  }
+
+}

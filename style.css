@@ -1,0 +1,28 @@
+#TabContainer
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.tab-content
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: norap;
+}
+
+.tab-icon
+{
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin-inline-end: 8px;
+}
+
+.tab-text
+{
+    font-size: 12px;
+    height: 12px;
+    line-height: 12px;
+}
