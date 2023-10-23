@@ -18,14 +18,6 @@ async function TabList()
     HTMLPinnedTabContainer.textContent = "";
     HTMLRegularTabContainer.textContent = "";
 
-
-
-
-
-
-
-
-
     let TabObjects = await browser.tabs.query({ currentWindow: true });
 
     for (let TabObject of TabObjects)
@@ -33,72 +25,38 @@ async function TabList()
         if (TabObject.pinned)
         {
             let HTMLTab = document.createElement("div");
-                    HTMLTab.classList.add("tabbrowser-tab");
+                HTMLTab.classList.add("tabbrowser-tab");
+                HTMLTab.setAttribute("pinned", TabObject.pinned);
+                HTMLPinnedTabContainer.appendChild(HTMLTab);
 
-                    HTMLTab.setAttribute("active", TabObject.active);
-                    HTMLTab.setAttribute("pinned", TabObject.pinned);
-                    HTMLTab.setAttribute("href", TabObject.url);
-                    HTMLTab.setAttribute("id", TabObject.id);
-                    HTMLTab.setAttribute("index", TabObject.index);
+                let HTMLTabBackground = document.createElement("div");
+                    HTMLTabBackground.classList.add("tab-background");
+                    HTMLTab.appendChild(HTMLTabBackground);
 
-                    HTMLPinnedTabContainer.appendChild(HTMLTab);
+                    let HTMLTabContent = document.createElement("div");
+                        HTMLTabContent.classList.add("tab-content");
+                        HTMLTabBackground.appendChild(HTMLTabContent);
 
-                    let HTMLTabBackground = document.createElement("div");
-                        HTMLTabBackground.classList.add("tab-background");
-                        HTMLTab.appendChild(HTMLTabBackground);
-
-                        let HTMLTabContent = document.createElement("div");
-                            HTMLTabContent.classList.add("tab-content");
-                            HTMLTabBackground.appendChild(HTMLTabContent);
-
-                            let HTMLTabIcon = document.createElement("img");
-                                HTMLTabIcon.classList.add("tab-icon");
-                                HTMLTabIcon.src = TabObject.favIconUrl;
-                                HTMLTabContent.appendChild(HTMLTabIcon);
+                        let HTMLTabIcon = document.createElement("img");
+                            HTMLTabIcon.classList.add("tab-icon");
+                            HTMLTabIcon.src = TabObject.favIconUrl;
+                            HTMLTabContent.appendChild(HTMLTabIcon);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         if (!TabObject.pinned)
         {
             let HTMLTab = document.createElement("div");
                 HTMLTab.classList.add("tabbrowser-tab");
-
-HTMLTab.setAttribute("href", TabObject.id);
-
+                HTMLTab.setAttribute("pinned", TabObject.pinned);
                 HTMLRegularTabContainer.appendChild(HTMLTab);
 
-                let HTMLTabStack = document.createElement("div");
-                    HTMLTabStack.classList.add("tab-stack");
-                    HTMLTab.appendChild(HTMLTabStack);
-
-                    let HTMLTabBackground = document.createElement("div");
-                        HTMLTabBackground.classList.add("tab-background");
-                        HTMLTabStack.appendChild(HTMLTabBackground);
-
-                        let HTMLTabContextLine = document.createElement("div");
-                            HTMLTabContextLine.classList.add("tab-context-line");
-                            HTMLTabBackground.appendChild(HTMLTabContextLine);
-
-                        let HTMLTabLoadingBurst = document.createElement("div");
-                            HTMLTabLoadingBurst.classList.add("tab-loading-burst");
-                            HTMLTabBackground.appendChild(HTMLTabLoadingBurst);
+                let HTMLTabBackground = document.createElement("div");
+                    HTMLTabBackground.classList.add("tab-background");
+                    HTMLTab.appendChild(HTMLTabBackground);
 
                     let HTMLTabContent = document.createElement("div");
                         HTMLTabContent.classList.add("tab-content");
-                        HTMLTabStack.appendChild(HTMLTabContent);
+                        HTMLTabBackground.appendChild(HTMLTabContent);
 
                         let HTMLTabIcon = document.createElement("img");
                             HTMLTabIcon.classList.add("tab-icon");
@@ -114,35 +72,8 @@ HTMLTab.setAttribute("href", TabObject.id);
                             HTMLTabCloseButton.classList.add("tab-close-button");
                             HTMLTabContent.appendChild(HTMLTabCloseButton);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -154,7 +85,7 @@ HTMLTab.setAttribute("href", TabObject.id);
 
 document.addEventListener("click", (e) => {
 
-  if (e.target.hasAttribute("href")) {
+  if (e.target.hasAttribute("active")) {
     
     let tabId = +e.target.getAttribute("href");
 
@@ -164,7 +95,7 @@ document.addEventListener("click", (e) => {
       {
         if (tab.id == tabId)
         {
-          browser.tabs.update(tabId, { active: true, highlighted: true });
+          browser.tabs.update(tabId, { active: true });
           Start();
         }
       }
@@ -175,8 +106,6 @@ document.addEventListener("click", (e) => {
 });
 
 */
-
-
 
 
 

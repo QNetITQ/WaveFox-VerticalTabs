@@ -5,11 +5,26 @@
     flex-wrap: nowrap;
 }
 
+#RegularTabContainer
+{
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
 .tab-content
 {
     display: flex;
     flex-direction: row;
-    flex-wrap: norap;
+    height: 36px;
+    align-items: center;
+    padding-inline: 10px;
 }
 
 .tab-icon
@@ -17,7 +32,32 @@
     display: block;
     width: 16px;
     height: 16px;
-    margin-inline-end: 8px;
+}
+
+
+
+/* Pinned tabs */
+
+
+
+
+
+
+
+
+
+
+
+
+/* Regular tabs */
+
+
+
+
+
+.tabbrowser-tab[pinned="false"] .tab-icon
+{
+    margin-inline-end: 10px;
 }
 
 .tab-text
