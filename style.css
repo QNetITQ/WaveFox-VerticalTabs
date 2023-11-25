@@ -16,6 +16,23 @@
 
 
 
+.tabbrowser-tab[visuallyselected="true"] .tab-background
+{
+    background-color: Field;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 1px rgba(0,0,0,0.1);
+}
+
+
+.tab-background
+{
+    pointer-events: none;
+}
+
+
+
+
+
 
 
 .tab-content
@@ -63,6 +80,6 @@
 .tab-text
 {
     font-size: 12px;
-    height: 12px;
-    line-height: 12px;
+    height: 36px;
+    line-height: 36px;
 }

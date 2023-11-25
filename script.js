@@ -3,16 +3,6 @@
 var HTMLPinnedTabContainer = document.getElementById("PinnedTabContainer");
 var HTMLRegularTabContainer = document.getElementById("RegularTabContainer");
 
-
-
-
-
-
-
-
-
-
-
 async function TabList()
 {
     HTMLPinnedTabContainer.textContent = "";
@@ -27,6 +17,8 @@ async function TabList()
             let HTMLTab = document.createElement("div");
                 HTMLTab.classList.add("tabbrowser-tab");
                 HTMLTab.setAttribute("pinned", TabObject.pinned);
+                HTMLTab.setAttribute("visuallyselected", TabObject.active);
+                HTMLTab.setAttribute("id", TabObject.id);
                 HTMLPinnedTabContainer.appendChild(HTMLTab);
 
                 let HTMLTabBackground = document.createElement("div");
@@ -48,6 +40,8 @@ async function TabList()
             let HTMLTab = document.createElement("div");
                 HTMLTab.classList.add("tabbrowser-tab");
                 HTMLTab.setAttribute("pinned", TabObject.pinned);
+                HTMLTab.setAttribute("visuallyselected", TabObject.active);
+                HTMLTab.setAttribute("id", TabObject.id);
                 HTMLRegularTabContainer.appendChild(HTMLTab);
 
                 let HTMLTabBackground = document.createElement("div");
@@ -81,31 +75,38 @@ async function TabList()
 
 
 
-/*
 
-document.addEventListener("click", (e) => {
+document.addEventListener("click", (e) =>
+{
 
-  if (e.target.hasAttribute("active")) {
-    
-    let tabId = +e.target.getAttribute("href");
+    /* Active Tab */
 
-    browser.tabs.query({ currentWindow: true }).then((tabs) => 
+    if (e.target.hasAttribute("visuallyselected"))
     {
-      for (let tab of tabs)
-      {
-        if (tab.id == tabId)
-        {
-          browser.tabs.update(tabId, { active: true });
-          Start();
-        }
-      }
-    });
-  }
+        let TabObjectId = parseInt(e.target.getAttribute("id"));
 
-  //e.preventDefault();
+        browser.tabs.query({ currentWindow: true }).then((TabObjects) =>
+        {
+            for (let TabObject of TabObjects)
+            {
+                if (TabObject.id === TabObjectId)
+                {
+                    browser.tabs.update(TabObjectId, { active: true });
+                    break;
+                }
+            }
+        });
+    }
+
+    TabList();
+
 });
 
-*/
+
+
+/* Active Tab Event */
+
+browser.tabs.onActivated.addListener(TabList);
 
 
 
@@ -115,18 +116,3 @@ document.addEventListener("click", (e) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-TabList();
-//document.addEventListener("DomContentLoaded", Start());
-//browser.tabs.onUpdated.addListener(Start);
-//browser.tabs.onCreated.addListener(Start);
