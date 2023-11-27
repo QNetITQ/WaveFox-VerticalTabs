@@ -20,7 +20,7 @@
 {
     background-color: Field;
     border-radius: 4px;
-    box-shadow: 0 2px 4px 1px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px 1px rgba(0,0,0,0.25);
 }
 
 
@@ -79,7 +79,17 @@
 
 .tab-text
 {
+    width: 100%;
     font-size: 12px;
     height: 36px;
     line-height: 36px;
+    overflow: hidden;
+}
+
+.tab-close-button
+{
+    min-width: 16px;
+    min-height: 16px;
+    background-color: red;
+    pointer-events: auto;
 }

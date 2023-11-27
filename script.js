@@ -6,7 +6,7 @@ var HTMLRegularTabContainer = document.getElementById("RegularTabContainer");
 async function TabList()
 {
     HTMLPinnedTabContainer.textContent = "";
-    HTMLRegularTabContainer.textContent = "";
+    HTMLRegularTabContainer.innerHTML = "";
 
     let TabObjects = await browser.tabs.query({ currentWindow: true });
 
@@ -64,6 +64,7 @@ async function TabList()
 
                         let HTMLTabCloseButton = document.createElement("div");
                             HTMLTabCloseButton.classList.add("tab-close-button");
+HTMLTabCloseButton.setAttribute("id", TabObject.id);
                             HTMLTabContent.appendChild(HTMLTabCloseButton);
         }
     }
@@ -78,8 +79,7 @@ async function TabList()
 
 document.addEventListener("click", (e) =>
 {
-
-    /* Active Tab */
+    /* ---------- Selected Tab (Internal Event) ---------- */
 
     if (e.target.hasAttribute("visuallyselected"))
     {
@@ -98,21 +98,50 @@ document.addEventListener("click", (e) =>
         });
     }
 
+    /* ---------- Close Tab (Internal Event) ---------- */
+
+    if (e.target.classList.contains("tab-close-button"))
+    {
+        let TabObjectId = parseInt(e.target.getAttribute("id"));
+
+        browser.tabs.query({ currentWindow: true }).then((TabObjects) =>
+        {
+            for (let TabObject of TabObjects)
+            {
+                if (TabObject.id === TabObjectId)
+                {
+                    browser.tabs.remove(TabObjectId);
+                    break;
+                }
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     TabList();
 
-});
+}
+);
 
-
-
-/* Active Tab Event */
+/* ---------- Selected Tab (External Event) ---------- */
 
 browser.tabs.onActivated.addListener(TabList);
 
+/* ---------- Close Tab (External Event) ---------- */
 
-
-
-
-
-
-
-
+browser.tabs.onRemoved.addListener(TabList);
