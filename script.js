@@ -19,6 +19,8 @@ async function TabList()
                 HTMLTab.setAttribute("pinned", TabObject.pinned);
                 HTMLTab.setAttribute("visuallyselected", TabObject.active);
                 HTMLTab.setAttribute("id", TabObject.id);
+                HTMLTab.setAttribute("soundplaying", TabObject.audible);
+                HTMLTab.setAttribute("muted", TabObject.mutedInfo.muted);
                 HTMLPinnedTabContainer.appendChild(HTMLTab);
 
                 let HTMLTabBackground = document.createElement("div");
@@ -29,10 +31,18 @@ async function TabList()
                         HTMLTabContent.classList.add("tab-content");
                         HTMLTabBackground.appendChild(HTMLTabContent);
 
-                        let HTMLTabIcon = document.createElement("img");
-                            HTMLTabIcon.classList.add("tab-icon");
-                            HTMLTabIcon.src = TabObject.favIconUrl;
-                            HTMLTabContent.appendChild(HTMLTabIcon);
+                        let HTMLTabIconStack = document.createElement("div");
+                            HTMLTabIconStack.classList.add("tab-icon-stack");
+                            HTMLTabContent.appendChild(HTMLTabIconStack);
+
+                            let HTMLTabIcon = document.createElement("img");
+                                HTMLTabIcon.classList.add("tab-icon");
+                                HTMLTabIcon.src = TabObject.favIconUrl;
+                                HTMLTabIconStack.appendChild(HTMLTabIcon);
+
+                            let HTMLTabIconSound = document.createElement("img");
+                                HTMLTabIconSound.classList.add("tab-icon-sound");
+                                HTMLTabIconStack.appendChild(HTMLTabIconSound);
         }
 
         if (!TabObject.pinned)
@@ -42,6 +52,8 @@ async function TabList()
                 HTMLTab.setAttribute("pinned", TabObject.pinned);
                 HTMLTab.setAttribute("visuallyselected", TabObject.active);
                 HTMLTab.setAttribute("id", TabObject.id);
+                HTMLTab.setAttribute("soundplaying", TabObject.audible);
+                HTMLTab.setAttribute("muted", TabObject.mutedInfo.muted);
                 HTMLRegularTabContainer.appendChild(HTMLTab);
 
                 let HTMLTabBackground = document.createElement("div");
@@ -52,10 +64,29 @@ async function TabList()
                         HTMLTabContent.classList.add("tab-content");
                         HTMLTabBackground.appendChild(HTMLTabContent);
 
-                        let HTMLTabIcon = document.createElement("img");
-                            HTMLTabIcon.classList.add("tab-icon");
-                            HTMLTabIcon.src = TabObject.favIconUrl;
-                            HTMLTabContent.appendChild(HTMLTabIcon);
+
+
+
+                        let HTMLTabIconStack = document.createElement("div");
+                            HTMLTabIconStack.classList.add("tab-icon-stack");
+                            HTMLTabContent.appendChild(HTMLTabIconStack);
+
+                            let HTMLTabIcon = document.createElement("img");
+                                HTMLTabIcon.classList.add("tab-icon");
+                                HTMLTabIcon.src = TabObject.favIconUrl;
+                                HTMLTabIconStack.appendChild(HTMLTabIcon);
+
+                            let HTMLTabIconSound = document.createElement("img");
+                                HTMLTabIconSound.classList.add("tab-icon-sound");
+                                HTMLTabIconStack.appendChild(HTMLTabIconSound);
+
+
+
+
+
+
+
+
 
                         let HTMLTabText = document.createElement("div");
                             HTMLTabText.classList.add("tab-text");
@@ -79,23 +110,16 @@ HTMLTabCloseButton.setAttribute("id", TabObject.id);
 
 document.addEventListener("click", (e) =>
 {
+
+
+
     /* ---------- Selected Tab (Internal Event) ---------- */
 
     if (e.target.hasAttribute("visuallyselected"))
     {
         let TabObjectId = parseInt(e.target.getAttribute("id"));
 
-        browser.tabs.query({ currentWindow: true }).then((TabObjects) =>
-        {
-            for (let TabObject of TabObjects)
-            {
-                if (TabObject.id === TabObjectId)
-                {
-                    browser.tabs.update(TabObjectId, { active: true });
-                    break;
-                }
-            }
-        });
+        browser.tabs.update(TabObjectId, { active: true });
     }
 
     /* ---------- Close Tab (Internal Event) ---------- */
@@ -104,17 +128,7 @@ document.addEventListener("click", (e) =>
     {
         let TabObjectId = parseInt(e.target.getAttribute("id"));
 
-        browser.tabs.query({ currentWindow: true }).then((TabObjects) =>
-        {
-            for (let TabObject of TabObjects)
-            {
-                if (TabObject.id === TabObjectId)
-                {
-                    browser.tabs.remove(TabObjectId);
-                    break;
-                }
-            }
-        });
+        browser.tabs.remove(TabObjectId);
     }
 
 
@@ -124,6 +138,7 @@ document.addEventListener("click", (e) =>
 
 
 
+});
 
 
 
@@ -132,11 +147,6 @@ document.addEventListener("click", (e) =>
 
 
 
-
-    TabList();
-
-}
-);
 
 /* ---------- Selected Tab (External Event) ---------- */
 
@@ -145,3 +155,13 @@ browser.tabs.onActivated.addListener(TabList);
 /* ---------- Close Tab (External Event) ---------- */
 
 browser.tabs.onRemoved.addListener(TabList);
+
+/* ---------- Update Tab ---------- */
+
+browser.tabs.onUpdated.addListener(TabList);
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", TabList);

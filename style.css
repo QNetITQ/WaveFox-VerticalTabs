@@ -44,12 +44,53 @@
     padding-inline: 10px;
 }
 
+.tab-icon-stack
+{
+    display: grid;
+}
+
 .tab-icon
 {
     display: block;
     width: 16px;
     height: 16px;
+    grid-area: 1 / 1 / span 1 / span 1;
 }
+
+.tab-icon-sound
+{
+    display: none;
+    width: 16px;
+    height: 16px;
+    grid-area: 1 / 1 / span 1 / span 1;
+}
+
+
+
+
+
+.tabbrowser-tab[soundplaying="true"] .tab-icon-sound
+{
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    margin-left: 8px;
+    margin-top: -8px;
+    background: green;
+}
+
+.tabbrowser-tab[muted="true"] .tab-icon-sound
+{
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    margin-left: 8px;
+    margin-top: -8px;
+    background: red;
+}
+
+
+
 
 
 
