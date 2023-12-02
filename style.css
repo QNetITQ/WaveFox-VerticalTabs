@@ -10,66 +10,64 @@
     width: 100%;
 }
 
-
-
-
-
-
-
 .tabbrowser-tab[visuallyselected="true"] .tab-background
 {
-    background-color: Field;
+    background-color: white;
     border-radius: 4px;
     box-shadow: 0 2px 4px 1px rgba(0,0,0,0.25);
 }
 
-
-.tab-background
+.tab-stack
 {
+    display: grid;
+    grid-template: auto / auto;
     pointer-events: none;
 }
 
-
-
-
-
-
+.tab-background
+{
+    grid-area: 1 / 1 / span 1 / span 1;
+}
 
 .tab-content
 {
+    grid-area: 1 / 1 / span 1 / span 1;
     display: flex;
     flex-direction: row;
-    height: 36px;
+    flex-wrap: nowrap;
     align-items: center;
+    height: 36px;
+    line-height: 36px;
     padding-inline: 10px;
+    font-size: 12px;
+}
+
+.tabbrowser-tab[pinned="false"] .tab-icon-stack
+{
+    margin-inline-end: 8px;
 }
 
 .tab-icon-stack
 {
     display: grid;
-}
-
-.tab-icon
-{
-    display: block;
+    grid-template: auto / auto;
     width: 16px;
     height: 16px;
-    grid-area: 1 / 1 / span 1 / span 1;
+
+    > *
+    {
+        grid-area: 1 / 1 / span 1 / span 1;
+        width: 16px;
+        height: 16px;
+    }
 }
 
-.tab-icon-sound
+.tab-icon-overlay
 {
-    display: none;
-    width: 16px;
-    height: 16px;
-    grid-area: 1 / 1 / span 1 / span 1;
+    pointer-events: auto;
 }
 
-
-
-
-
-.tabbrowser-tab[soundplaying="true"] .tab-icon-sound
+.tabbrowser-tab[soundplaying="true"] .tab-icon-overlay
 {
     display: block;
     position: absolute;
@@ -79,7 +77,7 @@
     background: green;
 }
 
-.tabbrowser-tab[muted="true"] .tab-icon-sound
+.tabbrowser-tab[muted="true"] .tab-icon-overlay
 {
     display: block;
     position: absolute;
@@ -89,48 +87,22 @@
     background: red;
 }
 
-
-
-
-
-
-/* Pinned tabs */
-
-
-
-
-
-
-
-
-
-
-
-
-/* Regular tabs */
-
-
-
-
-
-.tabbrowser-tab[pinned="false"] .tab-icon
-{
-    margin-inline-end: 10px;
-}
-
-.tab-text
+.tab-label-container
 {
     width: 100%;
-    font-size: 12px;
-    height: 36px;
-    line-height: 36px;
     overflow: hidden;
+}
+
+.tab-label
+{
+    height: 36px;
 }
 
 .tab-close-button
 {
+    pointer-events: auto;
     min-width: 16px;
     min-height: 16px;
     background-color: red;
-    pointer-events: auto;
+    margin-inline-start: 8px;
 }
