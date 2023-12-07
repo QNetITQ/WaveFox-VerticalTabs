@@ -106,3 +106,10 @@
     background-color: red;
     margin-inline-start: 8px;
 }
+
+/* Pinned Tabs */
+
+.tabbrowser-tab[pinned] :is(.tab-label-container, .tab-close-button)
+{
+    display: none;
+}
