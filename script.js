@@ -166,6 +166,19 @@ async function TabList()
     });
 
     }
+
+    /* ---------- New Tab Button ---------- */
+
+    let HTMLNewTabButton = document.createElement("div");
+        HTMLNewTabButton.classList.add("new-tab-button");
+        HTMLRegularTabContainer.appendChild(HTMLNewTabButton);
+
+        /* ---------- New Tab Button Events ---------- */
+
+        HTMLNewTabButton.addEventListener("click", (e) =>
+        {
+            browser.tabs.create({});
+        });
 }
 
 

@@ -113,3 +113,12 @@
 {
     display: none;
 }
+
+/* New Tab Button */
+
+.new-tab-button
+{
+    height: 36px;
+    background: green;
+    border-radius: 4px;
+}
