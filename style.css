@@ -5,7 +5,7 @@
     flex-wrap: nowrap;
 }
 
-#RegularTabContainer
+#RegularContainer
 {
     width: 100%;
 }
@@ -42,24 +42,9 @@
     font-size: 12px;
 }
 
-.tabbrowser-tab[pinned="false"] .tab-icon-stack
+.tabbrowser-tab:not([pinned]) .tab-icon-stack
 {
     margin-inline-end: 8px;
-}
-
-.tab-icon-stack
-{
-    display: grid;
-    grid-template: auto / auto;
-    width: 16px;
-    height: 16px;
-
-    > *
-    {
-        grid-area: 1 / 1 / span 1 / span 1;
-        width: 16px;
-        height: 16px;
-    }
 }
 
 .tab-icon-overlay
@@ -116,9 +101,89 @@
 
 /* New Tab Button */
 
-.new-tab-button
+#NewTabButton
 {
     height: 36px;
     background: green;
     border-radius: 4px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------------------------------------------------------------------------- */
+
+.tab-icon-stack
+{
+    display: grid;
+    grid-template: auto / auto;
+    min-width: 16px;
+    min-height: 16px;
+
+    > *
+    {
+        display: none;
+        grid-area: 1 / 1 / span 1 / span 1;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+
+
+
+
+
+
+/* load indictor */
+
+.tabbrowser-tab[loading] .tab-throbber
+{
+    display: block;
+    background-image: radial-gradient(circle at center, dodgerblue 2px, transparent 2px);
+    background-size: 4px 4px;
+    background-position: left center;
+    background-repeat: no-repeat;
+    animation: tab-throbber-animation 1s infinite;
+}
+
+@keyframes tab-throbber-animation
+{
+    0%   { transform: translateX(0px);  }
+    50%  { transform: translateX(12px); }
+    100% { transform: translateX(0px);  }
+}
+
+@keyframes tab-throbber-animation-rtl
+{
+
+}
+
+
+
+
+
+
+
+
+
+/* Sound / muted icon */
+
+.tabbrowser-tab:is([sounplaying], [muted]) .tab-icon-overlay
+{
+    display: block;
+}
+

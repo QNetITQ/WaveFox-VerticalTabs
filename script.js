@@ -2,6 +2,7 @@
 
 const HTMLPinnedTabContainer = document.getElementById("PinnedTabContainer");
 const HTMLRegularTabContainer = document.getElementById("RegularTabContainer");
+const HTMLNewTabButton = document.getElementById("NewTabButton");
 
 window.addEventListener("load", TabList);
 
@@ -97,13 +98,9 @@ async function TabList()
                         HTMLTabIconStack.classList.add("tab-icon-stack");
                         HTMLTabContent.appendChild(HTMLTabIconStack);
 
-                        let HTMLTabThrobber = document.createElement("img");
+                        let HTMLTabThrobber = document.createElement("div");
                             HTMLTabThrobber.classList.add("tab-throbber");
                             HTMLTabIconStack.appendChild(HTMLTabThrobber);
-
-                        let HTMLTabIconPending = document.createElement("img");
-                            HTMLTabIconPending.classList.add("tab-icon-pending");
-                            HTMLTabIconStack.appendChild(HTMLTabIconPending);
 
                         let HTMLTabIconImage = document.createElement("img");
                             HTMLTabIconImage.classList.add("tab-icon-image");
@@ -165,21 +162,90 @@ async function TabList()
         }
     });
 
-    }
 
-    /* ---------- New Tab Button ---------- */
 
-    let HTMLNewTabButton = document.createElement("div");
-        HTMLNewTabButton.classList.add("new-tab-button");
-        HTMLRegularTabContainer.appendChild(HTMLNewTabButton);
 
-        /* ---------- New Tab Button Events ---------- */
 
-        HTMLNewTabButton.addEventListener("click", (e) =>
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------------------------------- */
+
+    HTMLTabObject.addEventListener("mousedown", (e) =>
+    {
+
+
+        let HTMLTabObjectId = parseInt(e.currentTarget.getAttribute("id"));
+
+        //HTMLTabObject.setAttribute("index", JsTabObject.index);
+
+        HTMLTabObject.draggable = true;
+
+        HTMLTabObject.addEventListener("dragstart", (e) =>
         {
-            browser.tabs.create({});
+            e.dataTransfer.setData("div", HTMLTabObjectId);
         });
+
+        HTMLTabObject.addEventListener("dragover", (e) =>
+        {
+            e.preventDefault();
+            var data = e.dataTransfer.getData("div");
+            HTMLRegularTabContainer.appendChild(document.getElementById(data));
+            
+        });
+/*
+        HTMLTabObject.addEventListener("drop", (e) =>
+        {
+            e.preventDefault();
+            var data = e.dataTransfer.getData("div");
+            HTMLRegularTabContainer.appendChild(document.getElementById(data));
+        });              */
+    });
+
+/* ---------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }
+
+/* ---------- New Tab Button ---------- */
+
+HTMLNewTabButton.addEventListener("click", (e) =>
+{
+    browser.tabs.create({});
+});
+
+
+
+
+
 
 
 
@@ -199,6 +265,10 @@ browser.tabs.onActivated.addListener(TabList);
 /* ---------- Update Tab ---------- */
 
 browser.tabs.onUpdated.addListener(TabList);
+
+/* ---------- Move Tab ---------- */
+
+browser.tabs.onMoved.addListener(TabList);
 
 /* ---------- Close Tab (External Event) ---------- */
 
