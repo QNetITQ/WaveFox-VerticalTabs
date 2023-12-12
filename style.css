@@ -1,3 +1,19 @@
+:root
+{
+    background-color: ActiveCaption;
+    color: CaptionText;
+
+    color-scheme: light dark;
+}
+
+:root:-moz-window-inactive
+{
+    background-color: InActiveCaption;
+    color: InActiveCaptionText;
+}
+
+/* ------------------------------------------------------ */
+
 #TabContainer
 {
     display: flex;
@@ -10,12 +26,7 @@
     width: 100%;
 }
 
-.tabbrowser-tab[visuallyselected="true"] .tab-background
-{
-    background-color: white;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px 1px rgba(0,0,0,0.25);
-}
+/* ------------------------------------------------------ */
 
 .tab-stack
 {
@@ -24,10 +35,21 @@
     pointer-events: none;
 }
 
+/* ------------------------------------------------------- */
+
 .tab-background
 {
     grid-area: 1 / 1 / span 1 / span 1;
 }
+
+.tabbrowser-tab[visuallyselected] .tab-background
+{
+    background-color: Field;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+}
+
+/* ------------------------------------------------------- */
 
 .tab-content
 {
@@ -42,6 +64,35 @@
     font-size: 12px;
 }
 
+/* --------------------------------------------------------- */
+
+.tab-icon-stack
+{
+    display: grid;
+    grid-template: auto / auto;
+    min-width: 16px;
+    min-height: 16px;
+
+    > *
+    {
+        grid-area: 1 / 1 / span 1 / span 1;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 .tabbrowser-tab:not([pinned]) .tab-icon-stack
 {
     margin-inline-end: 8px;
@@ -52,7 +103,7 @@
     pointer-events: auto;
 }
 
-.tabbrowser-tab[soundplaying="true"] .tab-icon-overlay
+.tabbrowser-tab[soundplaying] .tab-icon-overlay
 {
     display: block;
     position: absolute;
@@ -62,7 +113,7 @@
     background: green;
 }
 
-.tabbrowser-tab[muted="true"] .tab-icon-overlay
+.tabbrowser-tab[muted] .tab-icon-overlay
 {
     display: block;
     position: absolute;
@@ -88,7 +139,12 @@
     pointer-events: auto;
     min-width: 16px;
     min-height: 16px;
-    background-color: red;
+
+    background-image: url("Icons/image2.png");
+    background-size: 12px 12px;
+    background-position: center center;
+    background-repeat: no-repeat;
+
     margin-inline-start: 8px;
 }
 
@@ -98,17 +154,6 @@
 {
     display: none;
 }
-
-/* New Tab Button */
-
-#NewTabButton
-{
-    height: 36px;
-    background: green;
-    border-radius: 4px;
-}
-
-
 
 
 
@@ -125,30 +170,6 @@
 
 
 /* ------------------------------------------------------------------------------- */
-
-.tab-icon-stack
-{
-    display: grid;
-    grid-template: auto / auto;
-    min-width: 16px;
-    min-height: 16px;
-
-    > *
-    {
-        display: none;
-        grid-area: 1 / 1 / span 1 / span 1;
-        width: 16px;
-        height: 16px;
-    }
-}
-
-
-
-
-
-
-
-/* load indictor */
 
 .tabbrowser-tab[loading] .tab-throbber
 {
@@ -178,12 +199,37 @@
 
 
 
-
-
 /* Sound / muted icon */
-
+/*
 .tabbrowser-tab:is([sounplaying], [muted]) .tab-icon-overlay
 {
     display: block;
 }
 
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ----------------------------------------------------- */
+
+#NewTabButton
+{
+    height: 36px;
+    background-image: url("Icons/image.png");
+    background-size: 16px 16px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+
+}
