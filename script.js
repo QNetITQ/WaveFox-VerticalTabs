@@ -162,75 +162,36 @@ async function TabList()
         }
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ------------------------------------- */
+    /* ---------- Drag & Drop ---------- */
 
     HTMLTabObject.addEventListener("mousedown", (e) =>
     {
-
-
-        let HTMLTabObjectId = parseInt(e.currentTarget.getAttribute("id"));
-
-        //HTMLTabObject.setAttribute("index", JsTabObject.index);
-
-        HTMLTabObject.draggable = true;
+        e.target.draggable = true;
+        let HTMLTabObjectIndex = undefined;
 
         HTMLTabObject.addEventListener("dragstart", (e) =>
         {
-            e.dataTransfer.setData("div", HTMLTabObjectId);
+            let HTMLTabObjectId = e.currentTarget.getAttribute("id");
+            e.dataTransfer.setData("HTMLTabObjectId", HTMLTabObjectId);
         });
 
-        HTMLTabObject.addEventListener("dragover", (e) =>
+        TabContainer.addEventListener("dragenter", (e) =>
         {
-            e.preventDefault();
-            var data = e.dataTransfer.getData("div");
-            HTMLRegularTabContainer.appendChild(document.getElementById(data));
-            
+            HTMLTabObjectIndex = parseInt(e.target.getAttribute("index"));
         });
-/*
-        HTMLTabObject.addEventListener("drop", (e) =>
+
+        TabContainer.addEventListener("dragover", (e) =>
         {
-            e.preventDefault();
-            var data = e.dataTransfer.getData("div");
-            HTMLRegularTabContainer.appendChild(document.getElementById(data));
-        });              */
+            event.preventDefault();
+        });
+
+        TabContainer.addEventListener("drop", (e) =>
+        {
+            event.preventDefault();
+            let HTMLTabObjectId = parseInt(e.dataTransfer.getData("HTMLTabObjectId"));
+            browser.tabs.move([HTMLTabObjectId], { index: HTMLTabObjectIndex });
+        });
     });
-
-/* ---------------------------------------------------- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }
@@ -241,22 +202,6 @@ HTMLNewTabButton.addEventListener("click", (e) =>
 {
     browser.tabs.create({});
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ---------- Selected Tab (External Event) ---------- */
 
