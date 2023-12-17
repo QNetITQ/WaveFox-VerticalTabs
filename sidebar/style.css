@@ -1,0 +1,314 @@
+:root
+{
+    color-scheme: light dark;
+    background-color: ActiveCaption;
+    color: CaptionText;
+
+    --toolbar-bgcolor: field;
+    --toolbar-color: fieldtext;
+    --toolbarbutton-icon-fill: currentColor;
+    --toolbarbutton-hover-background: color-mix(in srgb, currentColor 10%, transparent);
+    --toolbarbutton-active-background: color-mix(in srgb, currentColor 20%, transparent);
+
+    -moz-context-properties: fill, stroke;
+}
+
+:root:-moz-window-inactive
+{
+    background-color: InActiveCaption;
+    color: InActiveCaptionText;
+}
+
+/* ------------------------------------------------------ */
+
+#TabContainer
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+#RegularContainer
+{
+    width: 100%;
+}
+
+/* ------------------------------------------------------ */
+
+.tab-stack
+{
+    display: grid;
+    grid-template: auto / auto;
+}
+
+/* ------------------------------------------------------- */
+
+.tabbrowser-tab
+{
+    &[visuallyselected] .tab-background
+    {
+        background-color: Field;
+        color: fieldtext;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+
+    &:not([visuallyselected]):hover .tab-background
+    {
+        background-color: var(--toolbarbutton-hover-background);
+    }
+
+    &:not([visuallyselected]):hover:active .tab-background
+    {
+        background-color: var(--toolbarbutton-active-background);
+    }
+}
+
+.tab-background
+{
+    grid-area: 1 / 1 / span 1 / span 1;
+}
+
+/* ------------------------------------------------------- */
+
+.tab-content
+{
+    grid-area: 1 / 1 / span 1 / span 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    height: 36px;
+    line-height: 36px;
+    padding-inline: 10px;
+    font-size: 12px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --------------------------------------------------------- */
+
+.tab-icon-stack
+{
+    display: grid;
+    grid-template: auto / auto;
+    min-width: 16px;
+    min-height: 16px;
+
+    > *
+    {
+        grid-area: 1 / 1 / span 1 / span 1;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.tabbrowser-tab:not([pinned]) .tab-icon-stack
+{
+    margin-inline-end: 8px;
+}
+
+.tab-icon-overlay
+{
+    &:hover
+    {
+        background-color: var(--toolbarbutton-hover-background);
+    }
+
+    &:hover:active
+    {
+        background-color: var(--toolbarbutton-active-background);
+    }
+}
+
+.tabbrowser-tab[soundplaying] .tab-icon-overlay
+{
+    display block;
+    position: absolute;
+    border-radius: 50%;
+    margin-left: 8px;
+    margin-top: -8px;
+    background-image: url("icons/tab-audio-playing-small.svg");
+    fill: var(--toolbarbutton-icon-fill);
+    background-size: 12px 12px;
+    background-position: center center;
+    background-repeat: no-repeat;
+stroke: transparent;
+}
+
+.tabbrowser-tab[muted] .tab-icon-overlay
+{
+    display block;
+    position: absolute;
+    border-radius: 50%;
+    margin-left: 8px;
+    margin-top: -8px;
+    background-image: url("icons/tab-audio-muted-small.svg");
+    fill: var(--toolbarbutton-icon-fill);
+    background-size: 12px 12px;
+    background-position: center center;
+    background-repeat: no-repeat;
+stroke: transparent;
+}
+
+.tab-label-container
+{
+    width: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.tab-label
+{
+    height: 36px;
+}
+
+.tab-close-button
+{
+    min-width: 16px;
+    min-height: 16px;
+
+    background-image: url("icons/close-12.svg");
+    background-size: 12px 12px;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    fill: currentColor;
+
+    margin-inline-start: 8px;
+
+    &:hover
+    {
+        background-color: var(--toolbarbutton-hover-background);
+    }
+
+    &:hover:active
+    {
+        background-color: var(--toolbarbutton-active-background);
+    }
+
+}
+
+/* Pinned Tabs */
+
+.tabbrowser-tab[pinned] :is(.tab-label-container, .tab-close-button)
+{
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------------------------------------------------------------------------- */
+
+.tabbrowser-tab[loading] .tab-throbber
+{
+    display: block;
+    background-image: radial-gradient(circle at center, dodgerblue 2px, transparent 2px);
+    background-size: 4px 4px;
+    background-position: left center;
+    background-repeat: no-repeat;
+    animation: tab-throbber-animation 1s infinite;
+}
+
+@keyframes tab-throbber-animation
+{
+    0%   { transform: translateX(0px);  }
+    50%  { transform: translateX(12px); }
+    100% { transform: translateX(0px);  }
+}
+
+@keyframes tab-throbber-animation-rtl
+{
+
+}
+
+
+
+
+
+
+
+/* Sound / muted icon */
+
+.tabbrowser-tab:is([sounplaying], [muted]) .tab-icon-overlay
+{
+    display block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ----------------------------------------------------- */
+
+#NewTabButton
+{
+    height: 36px;
+    background-image: url("icons/plus.svg");
+    background-size: 16px 16px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-radius: 4px;
+    fill: var(--toolbarbutton-icon-fill);
+
+    &:hover
+    {
+        background-color: var(--toolbarbutton-hover-background);
+    }
+
+    &:hover:active
+    {
+        background-color: var(--toolbarbutton-active-background);
+    }
+}
