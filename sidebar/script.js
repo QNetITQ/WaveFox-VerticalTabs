@@ -75,25 +75,13 @@ async function TabList()
                 HTMLTabObject.setAttribute("visuallyselected", JsTabObject.active);
             }
 
-            let HTMLTabStack = document.createElement("div");
-                HTMLTabStack.classList.add("tab-stack");
-                HTMLTabObject.appendChild(HTMLTabStack);
-
-                let HTMLTabBackground = document.createElement("div");
-                    HTMLTabBackground.classList.add("tab-background");
-                    HTMLTabStack.appendChild(HTMLTabBackground);
-
-                    let HTMLTabContextLine = document.createElement("div");
-                        HTMLTabContextLine.classList.add("tab-context-line");
-                        HTMLTabBackground.appendChild(HTMLTabContextLine);
-
-                     let HTMLTabLoadingBurst = document.createElement("div");
-                         HTMLTabLoadingBurst.classList.add("tab-loading-burst");
-                         HTMLTabBackground.appendChild(HTMLTabLoadingBurst);
+            let HTMLTabBackground = document.createElement("div");
+                HTMLTabBackground.classList.add("tab-background");
+                HTMLTabObject.appendChild(HTMLTabBackground);
 
                 let HTMLTabContent = document.createElement("div");
                     HTMLTabContent.classList.add("tab-content");
-                    HTMLTabStack.appendChild(HTMLTabContent);
+                    HTMLTabBackground.appendChild(HTMLTabContent);
 
                     let HTMLTabIconStack = document.createElement("div");
                         HTMLTabIconStack.classList.add("tab-icon-stack");
@@ -118,12 +106,8 @@ async function TabList()
 
                     let HTMLTabLabelContainer = document.createElement("div");
                         HTMLTabLabelContainer.classList.add("tab-label-container");
+                        HTMLTabLabelContainer.innerHTML = JsTabObject.title;
                         HTMLTabContent.appendChild(HTMLTabLabelContainer);
-
-                        let HTMLTabLabel = document.createElement("div");
-                            HTMLTabLabel.classList.add("tab-label");
-                            HTMLTabLabel.innerHTML = JsTabObject.title;
-                            HTMLTabLabelContainer.appendChild(HTMLTabLabel);
 
                     let HTMLTabCloseButton = document.createElement("div");
                         HTMLTabCloseButton.classList.add("tab-close-button");
