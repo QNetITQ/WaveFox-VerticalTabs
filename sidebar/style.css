@@ -14,7 +14,6 @@
 
     font-size: 12px;
     line-height: 36px;
-    font-family: sans-serif;
 }
 
 :root:-moz-window-inactive
@@ -54,6 +53,7 @@
 .tab-background
 {
     border-radius: 4px;
+    pointer-events: none;
 }
 
 /* ------------------------------------------------------- */
@@ -69,24 +69,6 @@
     padding-inline: 10px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* --------------------------------------------------------- */
 
 .tab-icon-stack
@@ -98,23 +80,29 @@
 
     > *
     {
+        display: none;
         grid-area: 1 / 1 / span 1 / span 1;
         width: 16px;
         height: 16px;
     }
 }
 
+.tabbrowser-tab[loading] .tab-throbber
+{
+    display: block;
+    background-image: radial-gradient(circle at center, dodgerblue 2px, transparent 2px);
+    background-size: 4px 4px;
+    background-position: left center;
+    background-repeat: no-repeat;
+    animation: tab-throbber-animation 1s infinite;
+}
 
-
-
-
-
-
-
-
-
-
-
+@keyframes tab-throbber-animation
+{
+    0%   { transform: translateX(0px);  }
+    50%  { transform: translateX(12px); }
+    100% { transform: translateX(0px);  }
+}
 
 .tabbrowser-tab:not([pinned]) .tab-icon-stack
 {
@@ -134,9 +122,22 @@
     }
 }
 
+.tabbrowser-tab:not([loading]) .tab-icon-image
+{
+    display: block;
+}
+
+.tabbrowser-tab:is([soundplaying], [muted]) .tab-icon-image
+{
+    mask-image: url("icons/Media.svg");
+    mask-size: 16px 16px;
+    mask-repeat: no-repeat;
+    mask-position: left top;
+}
+
 .tabbrowser-tab[soundplaying] .tab-icon-overlay
 {
-    display block;
+    display: block;
     position: absolute;
     border-radius: 50%;
     margin-left: 8px;
@@ -147,11 +148,12 @@
     background-position: center center;
     background-repeat: no-repeat;
 stroke: transparent;
+pointer-events: auto;
 }
 
 .tabbrowser-tab[muted] .tab-icon-overlay
 {
-    display block;
+    display: block;
     position: absolute;
     border-radius: 50%;
     margin-left: 8px;
@@ -162,28 +164,8 @@ stroke: transparent;
     background-position: center center;
     background-repeat: no-repeat;
 stroke: transparent;
+pointer-events: auto;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ------------------------------------------------- */
 
@@ -209,6 +191,7 @@ stroke: transparent;
     border-radius: 50%;
     fill: currentColor;
     margin-inline-start: 8px;
+pointer-events: auto;
 
     &:hover
     {
@@ -240,44 +223,6 @@ stroke: transparent;
 .tabbrowser-tab[pinned] :is(.tab-label-container, .tab-close-button)
 {
     display: none;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ------------------------------------------------------------------------------- */
-
-.tabbrowser-tab[loading] .tab-throbber
-{
-    display: block;
-    background-image: radial-gradient(circle at center, dodgerblue 2px, transparent 2px);
-    background-size: 4px 4px;
-    background-position: left center;
-    background-repeat: no-repeat;
-    animation: tab-throbber-animation 1s infinite;
-}
-
-@keyframes tab-throbber-animation
-{
-    0%   { transform: translateX(0px);  }
-    50%  { transform: translateX(12px); }
-    100% { transform: translateX(0px);  }
-}
-
-@keyframes tab-throbber-animation-rtl
-{
-
 }
 
 

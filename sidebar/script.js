@@ -147,12 +147,25 @@ async function TabList()
         }
     });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /* ---------- Drag & Drop ---------- */
 
     HTMLTabObject.addEventListener("mousedown", (e) =>
     {
-        e.target.draggable = true;
-        let HTMLTabObjectIndex = undefined;
+        e.currentTarget.draggable = true;
 
         HTMLTabObject.addEventListener("dragstart", (e) =>
         {
@@ -162,21 +175,30 @@ async function TabList()
 
         TabContainer.addEventListener("dragenter", (e) =>
         {
-            HTMLTabObjectIndex = parseInt(e.target.getAttribute("index"));
+            let HTMLTabObjectIndex = parseInt(e.target.getAttribute("index"));
+            let HTMLTabObjectId = parseInt(e.dataTransfer.getData("HTMLTabObjectId"));
+            browser.tabs.move([HTMLTabObjectId], { index: HTMLTabObjectIndex });
         });
 
         TabContainer.addEventListener("dragover", (e) =>
         {
             event.preventDefault();
         });
-
-        TabContainer.addEventListener("drop", (e) =>
-        {
-            event.preventDefault();
-            let HTMLTabObjectId = parseInt(e.dataTransfer.getData("HTMLTabObjectId"));
-            browser.tabs.move([HTMLTabObjectId], { index: HTMLTabObjectIndex });
-        });
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }
