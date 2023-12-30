@@ -147,20 +147,6 @@ async function TabList()
         }
     });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /* ---------- Drag & Drop ---------- */
 
     HTMLTabObject.addEventListener("mousedown", (e) =>
@@ -194,14 +180,78 @@ async function TabList()
 
 
 
+    /* Menus */
 
+    HTMLTabObject.addEventListener("contextmenu", (e) =>
+    {
+        browser.menus.overrideContext({ showDefaults: false });
 
+        browser.menus.create(
+        {
+            id: "newTab",
+            title: "New Tab"
+        });
 
+        browser.menus.create(
+        {
+            id: "pinTab",
+            title: "Pin Tab"
+        });
 
+        browser.menus.create(
+        {
+            id: "unpinTab",
+            title: "Unpin Tab"
+        });
 
+        browser.menus.create(
+        {
+            id: "closeTab",
+            title: "Close Tab"
+        });
+    });
 
     }
 }
+
+browser.menus.onClicked.addListener((info, tab) =>
+{
+    let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
+
+    if (info.menuItemId === "newTab")
+    {
+        browser.tabs.create({});
+    }
+
+    else if (info.menuItemId === "pinTab")
+    {
+        let HTMLTabObjectId = parseInt(HTMLTabObject.id);
+        browser.tabs.update(HTMLTabObjectId, { pinned: true });
+    }
+
+    else if (info.menuItemId === "unpinTab")
+    {
+        let HTMLTabObjectId = parseInt(HTMLTabObject.id);
+        browser.tabs.update(HTMLTabObjectId, { pinned: false });
+    }
+
+    else if (info.menuItemId === "closeTab")
+    {
+        let HTMLTabObjectId = parseInt(HTMLTabObject.id);
+        browser.tabs.remove(HTMLTabObjectId);
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
 
 /* ---------- New Tab Button ---------- */
 
