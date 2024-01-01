@@ -75,6 +75,27 @@ async function TabList()
                 HTMLTabObject.setAttribute("visuallyselected", JsTabObject.active);
             }
 
+            /* Containers */
+
+            switch (JsTabObject.cookieStoreId)
+            {
+                case "firefox-container-1":
+                    HTMLTabObject.style.setProperty("--identity-icon-color", "#37adff");
+                    break;
+
+                case "firefox-container-2":
+                    HTMLTabObject.style.setProperty("--identity-icon-color", "#ff9f00");
+                    break;
+
+                case "firefox-container-3":
+                    HTMLTabObject.style.setProperty("--identity-icon-color", "#51cd00");
+                    break;
+
+                case "firefox-container-4":
+                    HTMLTabObject.style.setProperty("--identity-icon-color", "#ff4bda");
+                    break;
+            }
+
             let HTMLTabBackground = document.createElement("div");
                 HTMLTabBackground.classList.add("tab-background");
                 HTMLTabObject.appendChild(HTMLTabBackground);
