@@ -282,21 +282,71 @@ HTMLNewTabButton.addEventListener("click", (e) =>
     browser.tabs.create({});
 });
 
-/* ---------- Selected Tab (External Event) ---------- */
 
-browser.tabs.onActivated.addListener(TabList);
 
-/* ---------- Update Tab ---------- */
 
-browser.tabs.onUpdated.addListener(TabList);
 
-/* ---------- Move Tab ---------- */
 
-browser.tabs.onMoved.addListener(TabList);
 
-/* ---------- Close Tab (External Event) ---------- */
 
-browser.tabs.onRemoved.addListener(() =>
+
+
+
+
+
+
+
+
+
+/* ---------- External Events ---------- */
+
+browser.tabs.onActivated.addListener((activeInfo) =>
 {
-    setTimeout(TabList, 250); // Some sort of bug
+    TabList();
+});
+
+browser.tabs.onAttached.addListener((tabId, attachInfo) =>
+{
+    TabList();
+});
+
+browser.tabs.onCreated.addListener((tab) =>
+{
+    TabList();
+});
+
+browser.tabs.onDetached.addListener((tabId, detachInfo) =>
+{
+    TabList();
+});
+
+browser.tabs.onHighlighted.addListener((highlightInfo) =>
+{
+    TabList();
+});
+
+browser.tabs.onMoved.addListener((tabId, moveInfo) =>
+{
+    TabList();
+});
+
+browser.tabs.onRemoved.addListener((tabId, removeInfo) =>
+{
+    //setTimeout(TabList, 250); // Some sort of bug
+    TabList();
+});
+
+browser.tabs.onReplaced.addListener((addedTabId, removedTabId) =>
+{
+    TabList();
+});
+
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
+{
+    TabList();
+});
+
+browser.tabs.onZoomChange.addListener((ZoomChangeInfo) =>
+{
+    TabList();
 });
