@@ -193,87 +193,8 @@ async function TabList()
         });
     });
 
-    /* Menus */
-
-    HTMLTabObject.addEventListener("contextmenu", () =>
-    {
-        browser.menus.overrideContext({ showDefaults: false });
-
-        browser.menus.create(
-        {
-            id: "newTab",
-            title: "New Tab"
-        });
-
-        browser.menus.create(
-        {
-            id: "pinTab",
-            title: "Pin Tab"
-        });
-
-        browser.menus.create(
-        {
-            id: "unpinTab",
-            title: "Unpin Tab"
-        });
-
-        browser.menus.create(
-        {
-            id: "soundOn",
-            title: "Enable Tab Sound"
-        });
-
-        browser.menus.create(
-        {
-            id: "soundOff",
-            title: "Disable Tab Sound"
-        });
-
-        browser.menus.create(
-        {
-            id: "closeTab",
-            title: "Close Tab"
-        });
-    });
-
     }
 }
-
-browser.menus.onClicked.addListener((info, tab) =>
-{
-    let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
-    let HTMLTabObjectId = parseInt(HTMLTabObject.id);
-
-    if (info.menuItemId === "newTab")
-    {
-        browser.tabs.create({});
-    }
-
-    else if (info.menuItemId === "pinTab")
-    {
-        browser.tabs.update(HTMLTabObjectId, { pinned: true });
-    }
-
-    else if (info.menuItemId === "unpinTab")
-    {
-        browser.tabs.update(HTMLTabObjectId, { pinned: false });
-    }
-
-    else if (info.menuItemId === "soundOn")
-    {
-        browser.tabs.update(HTMLTabObjectId, { muted: false });
-    }
-
-    else if (info.menuItemId === "soundOff")
-    {
-        browser.tabs.update(HTMLTabObjectId, { muted: true });
-    }
-
-    else if (info.menuItemId === "closeTab")
-    {
-        browser.tabs.remove(HTMLTabObjectId);
-    }
-});
 
 /* ---------- New Tab Button ---------- */
 
@@ -282,21 +203,114 @@ HTMLNewTabButton.addEventListener("click", (e) =>
     browser.tabs.create({});
 });
 
+/* ---------- Menu Events ---------- */
 
+browser.menus.onShown.addListener((info, tab) =>
+{
+    browser.menus.create(
+    {
+        id: "New",
+        title: "New tab"
+    });
 
+    browser.menus.create(
+    {
+        id: "Refresh",
+        title: "Refresh tab"
+    });
 
+    browser.menus.create(
+    {
+        id: "Mute",
+        title: "Mute sound"
+    });
 
+    browser.menus.create(
+    {
+        id: "Unmute",
+        title: "Unmute sound"
+    });
 
+    browser.menus.create(
+    {
+        id: "Pin",
+        title: "Pin tab"
+    });
 
+    browser.menus.create(
+    {
+        id: "Unpin",
+        title: "Unpin tab"
+    });
 
+    browser.menus.create(
+    {
+        id: "Duplicate",
+        title: "Duplicate tab"
+    });
 
+    browser.menus.create(
+    {
+        id: "Close",
+        title: "Close tab"
+    });
 
+    browser.menus.create(
+    {
+        id: "Discard",
+        title: "Discard tab"
+    });
+});
 
+browser.menus.onClicked.addListener((info, tab) =>
+{
+    let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
+    let HTMLTabObjectId = parseInt(HTMLTabObject.id);
 
+    switch (info.menuItemId)
+    {
+        case "New":
+            browser.tabs.create({});
+            break;
 
+        case "Refresh":
+            browser.tabs.reload(HTMLTabObjectId);
+            break;
 
+        case "Mute":
+            browser.tabs.update(HTMLTabObjectId, { muted: true });
+            break;
 
+        case "Unmute":
+            browser.tabs.update(HTMLTabObjectId, { muted: false });
+            break;
 
+        case "Pin":
+            browser.tabs.update(HTMLTabObjectId, { pinned: true });
+            break;
+
+        case "Unpin":
+            browser.tabs.update(HTMLTabObjectId, { pinned: false });
+            break;
+
+        case "Duplicate":
+            browser.tabs.duplicate(HTMLTabObjectId);
+            break;
+
+        case "Close":
+            browser.tabs.remove(HTMLTabObjectId);
+            break;
+
+        case "Discard":
+            browser.tabs.discard(HTMLTabObjectId);
+            break;
+    }
+});
+
+browser.menus.onHidden.addListener(() =>
+{
+    //browser.menus.overrideContext({ showDefaults: false });
+});
 
 /* ---------- External Events ---------- */
 
@@ -332,8 +346,7 @@ browser.tabs.onMoved.addListener((tabId, moveInfo) =>
 
 browser.tabs.onRemoved.addListener((tabId, removeInfo) =>
 {
-    //setTimeout(TabList, 250); // Some sort of bug
-    TabList();
+    setTimeout(TabList, 250); // Some sort of bug
 });
 
 browser.tabs.onReplaced.addListener((addedTabId, removedTabId) =>
