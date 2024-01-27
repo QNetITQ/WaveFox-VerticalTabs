@@ -4,21 +4,73 @@ const HTMLPinnedTabContainer = document.getElementById("PinnedTabContainer");
 const HTMLRegularTabContainer = document.getElementById("RegularTabContainer");
 const HTMLNewTabButton = document.getElementById("NewTabButton");
 
-window.addEventListener("load", TabList);
+window.addEventListener("DOMContentLoaded", TabList);
 
 async function TabList()
 {
     let JsTabObjects = await browser.tabs.query({ currentWindow: true });
 
-    HTMLPinnedTabContainer.innerHTML = "";
-    HTMLRegularTabContainer.innerHTML = "";
+    HTMLPinnedTabContainer.textContent = "";
+    HTMLRegularTabContainer.textContent = "";
 
     for (let JsTabObject of JsTabObjects)
     {
         let HTMLTabObject = document.createElement("div");
             HTMLTabObject.classList.add("tabbrowser-tab");
-            HTMLTabObject.setAttribute("id", JsTabObject.id);
+            HTMLTabObject.id = JsTabObject.id;
             HTMLTabObject.setAttribute("index", JsTabObject.index);
+
+            let HTMLTabBackground = document.createElement("div");
+                HTMLTabBackground.classList.add("tab-background");
+                HTMLTabObject.appendChild(HTMLTabBackground);
+
+                let HTMLTabContent = document.createElement("div");
+                    HTMLTabContent.classList.add("tab-content");
+                    HTMLTabBackground.appendChild(HTMLTabContent);
+
+                    let HTMLTabIconStack = document.createElement("div");
+                        HTMLTabIconStack.classList.add("tab-icon-stack");
+                        HTMLTabContent.appendChild(HTMLTabIconStack);
+
+                        let HTMLTabThrobber = document.createElement("div");
+                            HTMLTabThrobber.classList.add("tab-throbber");
+                            HTMLTabIconStack.appendChild(HTMLTabThrobber);
+
+                        let HTMLTabIconImage = document.createElement("img");
+                            HTMLTabIconImage.classList.add("tab-icon-image");
+                            HTMLTabIconImage.src = JsTabObject.favIconUrl;
+                            HTMLTabIconStack.appendChild(HTMLTabIconImage);
+
+                        let HTMLTabSharingIconOverlay = document.createElement("img");
+                            HTMLTabSharingIconOverlay.classList.add("tab-sharing-icon-overlay");
+                            HTMLTabIconStack.appendChild(HTMLTabSharingIconOverlay);
+
+                        let HTMLTabIconOverlay = document.createElement("div");
+                            HTMLTabIconOverlay.classList.add("tab-icon-overlay");
+                            HTMLTabIconStack.appendChild(HTMLTabIconOverlay);
+
+                    let HTMLTabLabelContainer = document.createElement("span");
+                        HTMLTabLabelContainer.classList.add("tab-label-container");
+                        HTMLTabLabelContainer.textContent = JsTabObject.title;
+                        HTMLTabContent.appendChild(HTMLTabLabelContainer);
+
+                    let HTMLTabCloseButton = document.createElement("div");
+                        HTMLTabCloseButton.classList.add("tab-close-button");
+                        HTMLTabContent.appendChild(HTMLTabCloseButton);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             /* ---------- Pinned Tab Attribute ---------- */
 
@@ -75,64 +127,26 @@ async function TabList()
                 HTMLTabObject.setAttribute("visuallyselected", JsTabObject.active);
             }
 
-            /* Containers */
 
-            switch (JsTabObject.cookieStoreId)
-            {
-                case "firefox-container-1":
-                    HTMLTabObject.style.setProperty("--identity-icon-color", "#37adff");
-                    break;
 
-                case "firefox-container-2":
-                    HTMLTabObject.style.setProperty("--identity-icon-color", "#ff9f00");
-                    break;
 
-                case "firefox-container-3":
-                    HTMLTabObject.style.setProperty("--identity-icon-color", "#51cd00");
-                    break;
 
-                case "firefox-container-4":
-                    HTMLTabObject.style.setProperty("--identity-icon-color", "#ff4bda");
-                    break;
-            }
 
-            let HTMLTabBackground = document.createElement("div");
-                HTMLTabBackground.classList.add("tab-background");
-                HTMLTabObject.appendChild(HTMLTabBackground);
 
-                let HTMLTabContent = document.createElement("div");
-                    HTMLTabContent.classList.add("tab-content");
-                    HTMLTabBackground.appendChild(HTMLTabContent);
 
-                    let HTMLTabIconStack = document.createElement("div");
-                        HTMLTabIconStack.classList.add("tab-icon-stack");
-                        HTMLTabContent.appendChild(HTMLTabIconStack);
 
-                        let HTMLTabThrobber = document.createElement("div");
-                            HTMLTabThrobber.classList.add("tab-throbber");
-                            HTMLTabIconStack.appendChild(HTMLTabThrobber);
 
-                        let HTMLTabIconImage = document.createElement("img");
-                            HTMLTabIconImage.classList.add("tab-icon-image");
-                            HTMLTabIconImage.src = JsTabObject.favIconUrl;
-                            HTMLTabIconStack.appendChild(HTMLTabIconImage);
 
-                        let HTMLTabSharingIconOverlay = document.createElement("img");
-                            HTMLTabSharingIconOverlay.classList.add("tab-sharing-icon-overlay");
-                            HTMLTabIconStack.appendChild(HTMLTabSharingIconOverlay);
 
-                        let HTMLTabIconOverlay = document.createElement("div");
-                            HTMLTabIconOverlay.classList.add("tab-icon-overlay");
-                            HTMLTabIconStack.appendChild(HTMLTabIconOverlay);
 
-                    let HTMLTabLabelContainer = document.createElement("div");
-                        HTMLTabLabelContainer.classList.add("tab-label-container");
-                        HTMLTabLabelContainer.innerHTML = JsTabObject.title;
-                        HTMLTabContent.appendChild(HTMLTabLabelContainer);
 
-                    let HTMLTabCloseButton = document.createElement("div");
-                        HTMLTabCloseButton.classList.add("tab-close-button");
-                        HTMLTabContent.appendChild(HTMLTabCloseButton);
+
+
+
+
+
+
+
 
     /* ---------- Tab Events ---------- */
 
@@ -142,7 +156,7 @@ async function TabList()
 
         /* ---------- Selected Tab (Internal Event) ---------- */
 
-        if (JsTabObject.active === false)
+        if (JsTabObject.active === false && e.target.classList.contains("tabbrowser-tab"))
         {
             browser.tabs.update(HTMLTabObjectId, { active: true });
         }
@@ -189,7 +203,7 @@ async function TabList()
 
         TabContainer.addEventListener("dragover", (e) =>
         {
-            event.preventDefault();
+            e.preventDefault();
         });
     });
 
