@@ -3,7 +3,7 @@
   "name": "WaveFox vertical tabs",
   "description": "Not now",
   "version": "0.0.1",
-  "permissions": ["activeTab", "tabs", "menus", "menus.overrideContext", "contextualIdentities", "cookies"],
+  "permissions": ["activeTab", "tabs", "menus", "menus.overrideContext"],
 
   "icons": {
     "64": "icons/icon.png"
