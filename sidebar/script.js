@@ -10,6 +10,9 @@ async function TabList()
 {
     let JsTabObjects = await browser.tabs.query({ currentWindow: true });
 
+    let PinnedTabsVirtualDOM = document.createDocumentFragment();
+    let RegularTabsVirtualDOM = document.createDocumentFragment();
+
     HTMLPinnedTabContainer.textContent = "";
     HTMLRegularTabContainer.textContent = "";
 
@@ -19,6 +22,16 @@ async function TabList()
             HTMLTabObject.classList.add("tabbrowser-tab");
             HTMLTabObject.id = JsTabObject.id;
             HTMLTabObject.setAttribute("index", JsTabObject.index);
+
+            if (JsTabObject.pinned)
+            {
+                PinnedTabsVirtualDOM.appendChild(HTMLTabObject);
+            }
+
+            else
+            {
+                RegularTabsVirtualDOM.appendChild(HTMLTabObject);
+            }
 
             let HTMLTabBackground = document.createElement("div");
                 HTMLTabBackground.classList.add("tab-background");
@@ -49,7 +62,7 @@ async function TabList()
                             HTMLTabIconOverlay.classList.add("tab-icon-overlay");
                             HTMLTabIconStack.appendChild(HTMLTabIconOverlay);
 
-                    let HTMLTabLabelContainer = document.createElement("span");
+                    let HTMLTabLabelContainer = document.createElement("div");
                         HTMLTabLabelContainer.classList.add("tab-label-container");
                         HTMLTabLabelContainer.textContent = JsTabObject.title;
                         HTMLTabContent.appendChild(HTMLTabLabelContainer);
@@ -58,156 +71,115 @@ async function TabList()
                         HTMLTabCloseButton.classList.add("tab-close-button");
                         HTMLTabContent.appendChild(HTMLTabCloseButton);
 
+        /* ---------- Attributes ---------- */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            /* ---------- Pinned Tab Attribute ---------- */
-
-            if (JsTabObject.pinned)
-            {
-                HTMLTabObject.setAttribute("pinned", JsTabObject.pinned);
-                HTMLPinnedTabContainer.appendChild(HTMLTabObject);
-            }
-
-            else
-            {
-                HTMLRegularTabContainer.appendChild(HTMLTabObject);
-            }
-
-            /* ---------- Tab Discarded Attribute ---------- */
-
-            if (JsTabObject.discarded)
-            {
-                HTMLTabObject.setAttribute("discarded", JsTabObject.discarded);
-            }
-
-            /* ---------- Tab Status Attribute ---------- */
-
-            if (JsTabObject.status == "loading")
-            {
-                HTMLTabObject.setAttribute("loading", JsTabObject.status);
-            }
-
-            /* ---------- Tab Attention Attribute ---------- */
-
-            if (JsTabObject.attention)
-            {
-                HTMLTabObject.setAttribute("attention", JsTabObject.attention);
-            }
-
-            /* ---------- Soundplaying Tab Attribute ---------- */
-
-            if (JsTabObject.audible)
-            {
-                HTMLTabObject.setAttribute("soundplaying", JsTabObject.audible);
-            }
-
-            /* ---------- Muted Tab Attribute ---------- */
-
-            if (JsTabObject.mutedInfo.muted)
-            {
-                HTMLTabObject.setAttribute("muted", JsTabObject.mutedInfo.muted);
-            }
-
-            /* ---------- Active Tab Attribute ---------- */
-
-            if (JsTabObject.active)
-            {
-                HTMLTabObject.setAttribute("visuallyselected", JsTabObject.active);
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /* ---------- Tab Events ---------- */
-
-    HTMLTabObject.addEventListener("click", (e) =>
-    {
-        let HTMLTabObjectId = parseInt(e.currentTarget.getAttribute("id"));
-
-        /* ---------- Selected Tab (Internal Event) ---------- */
-
-        if (JsTabObject.active === false && e.target.classList.contains("tabbrowser-tab"))
+        if (JsTabObject.active)
         {
-            browser.tabs.update(HTMLTabObjectId, { active: true });
+            HTMLTabObject.setAttribute("visuallyselected", JsTabObject.active);
         }
 
-        /* ---------- Close Tab (Internal Event) ---------- */
-
-        if (e.target.classList.contains("tab-close-button"))
+        if (JsTabObject.attention)
         {
-            browser.tabs.remove(HTMLTabObjectId);
+            HTMLTabObject.setAttribute("attention", JsTabObject.attention);
         }
 
-        /* ---------- Tab Sound Icon (Internal Event) ---------- */
-
-        if (e.target.classList.contains("tab-icon-overlay"))
+        if (JsTabObject.audible)
         {
-            browser.tabs.update(HTMLTabObjectId, { muted: true });
+            HTMLTabObject.setAttribute("soundplaying", JsTabObject.audible);
         }
 
-        if (e.target.classList.contains("tab-icon-overlay") &&
-            e.currentTarget.hasAttribute("muted"))
+        if (JsTabObject.discarded)
         {
-            browser.tabs.update(HTMLTabObjectId, { muted: false });
+            HTMLTabObject.setAttribute("discarded", JsTabObject.discarded);
         }
-    });
 
-    /* ---------- Drag & Drop ---------- */
-
-    HTMLTabObject.addEventListener("mousedown", (e) =>
-    {
-        e.currentTarget.draggable = true;
-
-        HTMLTabObject.addEventListener("dragstart", (e) =>
+        if (JsTabObject.hidden)
         {
-            let HTMLTabObjectId = e.currentTarget.getAttribute("id");
-            e.dataTransfer.setData("HTMLTabObjectId", HTMLTabObjectId);
+            HTMLTabObject.setAttribute("hidden", JsTabObject.hidden);
+        }
+
+        if (JsTabObject.hidden)
+        {
+            HTMLTabObject.setAttribute("hidden", JsTabObject.hidden);
+        }
+
+        if (JsTabObject.mutedInfo.muted)
+        {
+            HTMLTabObject.setAttribute("muted", JsTabObject.mutedInfo.muted);
+        }
+
+        if (JsTabObject.pinned)
+        {
+            HTMLTabObject.setAttribute("pinned", JsTabObject.pinned);
+        }
+
+        if (JsTabObject.status == "loading")
+        {
+            HTMLTabObject.setAttribute("loading", JsTabObject.status);
+        }
+
+        /* ---------- Tab Events ---------- */
+
+        HTMLTabObject.addEventListener("click", (e) =>
+        {
+            let HTMLTabObjectId = parseInt(e.currentTarget.getAttribute("id"));
+
+            /* ---------- Selected Tab (Internal Event) ---------- */
+
+            if (JsTabObject.active === false && e.target.classList.contains("tabbrowser-tab"))
+            {
+                browser.tabs.update(HTMLTabObjectId, { active: true });
+            }
+
+            /* ---------- Close Tab (Internal Event) ---------- */
+
+            if (e.target.classList.contains("tab-close-button"))
+            {
+                browser.tabs.remove(HTMLTabObjectId);
+            }
+
+            /* ---------- Tab Sound Icon (Internal Event) ---------- */
+
+            if (e.target.classList.contains("tab-icon-overlay"))
+            {
+                browser.tabs.update(HTMLTabObjectId, { muted: true });
+            }
+
+            if (e.target.classList.contains("tab-icon-overlay") &&
+                e.currentTarget.hasAttribute("muted"))
+            {
+                browser.tabs.update(HTMLTabObjectId, { muted: false });
+            }
         });
 
-        TabContainer.addEventListener("dragenter", (e) =>
-        {
-            let HTMLTabObjectIndex = parseInt(e.target.getAttribute("index"));
-            let HTMLTabObjectId = parseInt(e.dataTransfer.getData("HTMLTabObjectId"));
-            browser.tabs.move([HTMLTabObjectId], { index: HTMLTabObjectIndex });
-        });
+        /* ---------- Drag & Drop ---------- */
 
-        TabContainer.addEventListener("dragover", (e) =>
+        HTMLTabObject.addEventListener("mousedown", (e) =>
         {
-            e.preventDefault();
-        });
-    });
+            e.currentTarget.draggable = true;
 
+            HTMLTabObject.addEventListener("dragstart", (e) =>
+            {
+                let HTMLTabObjectId = e.currentTarget.getAttribute("id");
+                e.dataTransfer.setData("HTMLTabObjectId", HTMLTabObjectId);
+            });
+
+            TabContainer.addEventListener("dragenter", (e) =>
+            {
+                let HTMLTabObjectIndex = parseInt(e.target.getAttribute("index"));
+                let HTMLTabObjectId = parseInt(e.dataTransfer.getData("HTMLTabObjectId"));
+                browser.tabs.move([HTMLTabObjectId], { index: HTMLTabObjectIndex });
+            });
+
+            TabContainer.addEventListener("dragover", (e) =>
+            {
+                e.preventDefault();
+            });
+        });
     }
+
+    HTMLPinnedTabContainer.appendChild(PinnedTabsVirtualDOM);
+    HTMLRegularTabContainer.appendChild(RegularTabsVirtualDOM);
 }
 
 /* ---------- New Tab Button ---------- */
@@ -217,114 +189,218 @@ HTMLNewTabButton.addEventListener("click", (e) =>
     browser.tabs.create({});
 });
 
-/* ---------- Menu Events ---------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---------- Menu ---------- */
+
+document.addEventListener("contextmenu", () =>
+{
+    //browser.menus.overrideContext({ showDefaults: false });
+});
 
 browser.menus.onShown.addListener((info, tab) =>
 {
     browser.menus.create(
     {
         id: "New",
-        title: "New tab"
+        title: "New tab",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "separator-1",
+        type: "separator"
     });
 
     browser.menus.create(
     {
         id: "Refresh",
-        title: "Refresh tab"
+        title: "Refresh tab",
+        type: "normal"
     });
 
     browser.menus.create(
     {
         id: "Mute",
-        title: "Mute sound"
+        title: "Mute sound",
+        type: "normal",
+        visible: false
     });
 
     browser.menus.create(
     {
         id: "Unmute",
-        title: "Unmute sound"
+        title: "Unmute sound",
+        type: "normal",
+        visible: false
     });
 
     browser.menus.create(
     {
         id: "Pin",
-        title: "Pin tab"
+        title: "Pin tab",
+        type: "normal",
+        visible: false
     });
 
     browser.menus.create(
     {
         id: "Unpin",
-        title: "Unpin tab"
+        title: "Unpin tab",
+        type: "normal",
+        visible: false
     });
 
     browser.menus.create(
     {
         id: "Duplicate",
-        title: "Duplicate tab"
+        title: "Duplicate tab",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "separator-2",
+        type: "separator"
     });
 
     browser.menus.create(
     {
         id: "Close",
-        title: "Close tab"
+        title: "Close tab",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "separator-3",
+        type: "separator"
     });
 
     browser.menus.create(
     {
         id: "Discard",
-        title: "Discard tab"
+        title: "Discard tab",
+        type: "normal"
     });
 });
 
-browser.menus.onClicked.addListener((info, tab) =>
-{
-    let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
-    let HTMLTabObjectId = parseInt(HTMLTabObject.id);
 
-    switch (info.menuItemId)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    browser.menus.onClicked.addListener((info, tab) =>
     {
-        case "New":
-            browser.tabs.create({});
-            break;
+        let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
+        let HTMLTabObjectId = parseInt(HTMLTabObject.id);
 
-        case "Refresh":
-            browser.tabs.reload(HTMLTabObjectId);
-            break;
+        switch (info.menuItemId)
+        {
+            case "New":
+                browser.tabs.create({});
+                break;
 
-        case "Mute":
-            browser.tabs.update(HTMLTabObjectId, { muted: true });
-            break;
+            case "Refresh":
+                browser.tabs.reload(HTMLTabObjectId);
+                break;
 
-        case "Unmute":
-            browser.tabs.update(HTMLTabObjectId, { muted: false });
-            break;
+            case "Mute":
+                browser.tabs.update(HTMLTabObjectId, { muted: true });
+                break;
 
-        case "Pin":
-            browser.tabs.update(HTMLTabObjectId, { pinned: true });
-            break;
+            case "Unmute":
+                browser.tabs.update(HTMLTabObjectId, { muted: false });
+                break;
 
-        case "Unpin":
-            browser.tabs.update(HTMLTabObjectId, { pinned: false });
-            break;
+            case "Pin":
+                browser.tabs.update(HTMLTabObjectId, { pinned: true });
+                break;
 
-        case "Duplicate":
-            browser.tabs.duplicate(HTMLTabObjectId);
-            break;
+            case "Unpin":
+                browser.tabs.update(HTMLTabObjectId, { pinned: false });
+                break;
 
-        case "Close":
-            browser.tabs.remove(HTMLTabObjectId);
-            break;
+            case "Duplicate":
+                browser.tabs.duplicate(HTMLTabObjectId);
+                break;
 
-        case "Discard":
-            browser.tabs.discard(HTMLTabObjectId);
-            break;
-    }
-});
+            case "Close":
+                browser.tabs.remove(HTMLTabObjectId);
+                break;
 
-browser.menus.onHidden.addListener(() =>
+            case "Discard":
+                browser.tabs.discard(HTMLTabObjectId);
+                break;
+        }
+
+
+if (HTMLTabObject.hasAttribute("muted"))
 {
-    //browser.menus.overrideContext({ showDefaults: false });
-});
+    browser.menus.update("Unmute", { visible: true });
+}
+
+if (HTMLTabObject.hasAttribute("soundplaying"))
+{
+    browser.menus.update("Mute", { visible: true });
+}
+
+if (HTMLTabObject.hasAttribute("pinned"))
+{
+    browser.menus.update("Unpin", { visible: true });
+}
+
+if (HTMLTabObject.hasAttribute("pinned") == false)
+{
+    browser.menus.update("Pin", { visible: true });
+}
+
+browser.menus.refresh();
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ---------- External Events ---------- */
 

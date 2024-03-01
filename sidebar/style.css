@@ -1,8 +1,8 @@
 :root
 {
     color-scheme: light dark;
-    background-color: ActiveCaption;
-    color: CaptionText;
+    background-color: -moz-Dialog;
+    color: -moz-DialogText;
 
     --toolbar-bgcolor: field;
     --toolbar-color: fieldtext;
@@ -18,8 +18,8 @@
 
 :root:-moz-window-inactive
 {
-    background-color: InActiveCaption;
-    color: InActiveCaptionText;
+    background-color InActiveCaption;
+    color InActiveCaptionText;
 }
 
 /* ------------------------------------------------------ */
