@@ -4,7 +4,7 @@ const HTMLPinnedTabContainer = document.getElementById("PinnedTabContainer");
 const HTMLRegularTabContainer = document.getElementById("RegularTabContainer");
 const HTMLNewTabButton = document.getElementById("NewTabButton");
 
-window.addEventListener("DOMContentLoaded", TabList);
+document.addEventListener("DOMContentLoaded", TabList);
 
 async function TabList()
 {
@@ -33,13 +33,25 @@ async function TabList()
                 RegularTabsVirtualDOM.appendChild(HTMLTabObject);
             }
 
-            let HTMLTabBackground = document.createElement("div");
-                HTMLTabBackground.classList.add("tab-background");
-                HTMLTabObject.appendChild(HTMLTabBackground);
+            let HTMLTabStack = document.createElement("div");
+                HTMLTabStack.classList.add("tab-stack");
+                HTMLTabObject.appendChild(HTMLTabStack);
+
+                let HTMLTabBackground = document.createElement("div");
+                    HTMLTabBackground.classList.add("tab-background");
+                    HTMLTabStack.appendChild(HTMLTabBackground);
+
+                    let HTMLTabContextLine = document.createElement("div");
+                        HTMLTabContextLine.classList.add("tab-context-line");
+                        HTMLTabBackground.appendChild(HTMLTabContextLine);
+
+                    let HTMLTabLoadingBurst = document.createElement("div");
+                        HTMLTabLoadingBurst.classList.add("tab-loading-burst");
+                        HTMLTabBackground.appendChild(HTMLTabLoadingBurst);
 
                 let HTMLTabContent = document.createElement("div");
                     HTMLTabContent.classList.add("tab-content");
-                    HTMLTabBackground.appendChild(HTMLTabContent);
+                    HTMLTabStack.appendChild(HTMLTabContent);
 
                     let HTMLTabIconStack = document.createElement("div");
                         HTMLTabIconStack.classList.add("tab-icon-stack");
@@ -48,6 +60,10 @@ async function TabList()
                         let HTMLTabThrobber = document.createElement("div");
                             HTMLTabThrobber.classList.add("tab-throbber");
                             HTMLTabIconStack.appendChild(HTMLTabThrobber);
+
+                        let HTMLTabIconPending = document.createElement("div");
+                            HTMLTabIconPending.classList.add("tab-icon-pending");
+                            HTMLTabIconStack.appendChild(HTMLTabIconPending);
 
                         let HTMLTabIconImage = document.createElement("img");
                             HTMLTabIconImage.classList.add("tab-icon-image");
@@ -58,18 +74,30 @@ async function TabList()
                             HTMLTabSharingIconOverlay.classList.add("tab-sharing-icon-overlay");
                             HTMLTabIconStack.appendChild(HTMLTabSharingIconOverlay);
 
-                        let HTMLTabIconOverlay = document.createElement("div");
-                            HTMLTabIconOverlay.classList.add("tab-icon-overlay");
-                            HTMLTabIconStack.appendChild(HTMLTabIconOverlay);
+                        let HTMLTabOverlay = document.createElement("div");
+                            HTMLTabOverlay.classList.add("tab-overlay");
+                            HTMLTabIconStack.appendChild(HTMLTabOverlay);
+
+                            let HTMLTabIconOverlay = document.createElement("div");
+                                HTMLTabIconOverlay.classList.add("tab-icon-overlay");
+                                HTMLTabOverlay.appendChild(HTMLTabIconOverlay);
 
                     let HTMLTabLabelContainer = document.createElement("div");
                         HTMLTabLabelContainer.classList.add("tab-label-container");
-                        HTMLTabLabelContainer.textContent = JsTabObject.title;
                         HTMLTabContent.appendChild(HTMLTabLabelContainer);
+
+                        let HTMLTabLable = document.createElement("div");
+                            HTMLTabLable.classList.add("tab-lable");
+                            HTMLTabLable.textContent = JsTabObject.title;
+                            HTMLTabLabelContainer.appendChild(HTMLTabLable);
 
                     let HTMLTabCloseButton = document.createElement("div");
                         HTMLTabCloseButton.classList.add("tab-close-button");
                         HTMLTabContent.appendChild(HTMLTabCloseButton);
+
+                        let HTMLTabCloseButtonIcon = document.createElement("div");
+                            HTMLTabCloseButtonIcon.classList.add("tab-close-button-icon");
+                            HTMLTabCloseButton.appendChild(HTMLTabCloseButtonIcon);
 
         /* ---------- Attributes ---------- */
 
@@ -98,11 +126,6 @@ async function TabList()
             HTMLTabObject.setAttribute("hidden", JsTabObject.hidden);
         }
 
-        if (JsTabObject.hidden)
-        {
-            HTMLTabObject.setAttribute("hidden", JsTabObject.hidden);
-        }
-
         if (JsTabObject.mutedInfo.muted)
         {
             HTMLTabObject.setAttribute("muted", JsTabObject.mutedInfo.muted);
@@ -116,6 +139,11 @@ async function TabList()
         if (JsTabObject.status == "loading")
         {
             HTMLTabObject.setAttribute("loading", JsTabObject.status);
+        }
+
+        if (JsTabObject.favIconUrl == undefined)
+        {
+            HTMLTabObject.setAttribute("no-icon", true);
         }
 
         /* ---------- Tab Events ---------- */
@@ -133,7 +161,7 @@ async function TabList()
 
             /* ---------- Close Tab (Internal Event) ---------- */
 
-            if (e.target.classList.contains("tab-close-button"))
+            if (e.target.classList.contains("tab-close-button-icon"))
             {
                 browser.tabs.remove(HTMLTabObjectId);
             }
@@ -208,18 +236,12 @@ HTMLNewTabButton.addEventListener("click", (e) =>
 
 /* ---------- Menu ---------- */
 
-document.addEventListener("contextmenu", () =>
-{
-    //browser.menus.overrideContext({ showDefaults: false });
-});
-
 browser.menus.onShown.addListener((info, tab) =>
 {
     browser.menus.create(
     {
         id: "New",
-        title: "New tab",
-        type: "normal"
+        title: "New tab"
     });
 
     browser.menus.create(
@@ -239,32 +261,28 @@ browser.menus.onShown.addListener((info, tab) =>
     {
         id: "Mute",
         title: "Mute sound",
-        type: "normal",
-        visible: false
+        type: "normal"
     });
 
     browser.menus.create(
     {
         id: "Unmute",
         title: "Unmute sound",
-        type: "normal",
-        visible: false
+        type: "normal"
     });
 
     browser.menus.create(
     {
         id: "Pin",
         title: "Pin tab",
-        type: "normal",
-        visible: false
+        type: "normal"
     });
 
     browser.menus.create(
     {
         id: "Unpin",
         title: "Unpin tab",
-        type: "normal",
-        visible: false
+        type: "normal"
     });
 
     browser.menus.create(
@@ -301,106 +319,50 @@ browser.menus.onShown.addListener((info, tab) =>
     });
 });
 
+browser.menus.onClicked.addListener((info, tab) =>
+{
+    let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
+    let HTMLTabObjectId = parseInt(HTMLTabObject.id);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    browser.menus.onClicked.addListener((info, tab) =>
+    switch (info.menuItemId)
     {
-        let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
-        let HTMLTabObjectId = parseInt(HTMLTabObject.id);
+        case "New":
+            browser.tabs.create({});
+            break;
 
-        switch (info.menuItemId)
-        {
-            case "New":
-                browser.tabs.create({});
-                break;
+        case "Refresh":
+            browser.tabs.reload(HTMLTabObjectId);
+            break;
 
-            case "Refresh":
-                browser.tabs.reload(HTMLTabObjectId);
-                break;
+        case "Mute":
+            browser.tabs.update(HTMLTabObjectId, { muted: true });
+            break;
 
-            case "Mute":
-                browser.tabs.update(HTMLTabObjectId, { muted: true });
-                break;
+        case "Unmute":
+            browser.tabs.update(HTMLTabObjectId, { muted: false });
+            break;
 
-            case "Unmute":
-                browser.tabs.update(HTMLTabObjectId, { muted: false });
-                break;
+        case "Pin":
+            browser.tabs.update(HTMLTabObjectId, { pinned: true });
+            break;
 
-            case "Pin":
-                browser.tabs.update(HTMLTabObjectId, { pinned: true });
-                break;
+        case "Unpin":
+            browser.tabs.update(HTMLTabObjectId, { pinned: false });
+            break;
 
-            case "Unpin":
-                browser.tabs.update(HTMLTabObjectId, { pinned: false });
-                break;
+        case "Duplicate":
+            browser.tabs.duplicate(HTMLTabObjectId);
+            break;
 
-            case "Duplicate":
-                browser.tabs.duplicate(HTMLTabObjectId);
-                break;
+        case "Close":
+            browser.tabs.remove(HTMLTabObjectId);
+            break;
 
-            case "Close":
-                browser.tabs.remove(HTMLTabObjectId);
-                break;
-
-            case "Discard":
-                browser.tabs.discard(HTMLTabObjectId);
-                break;
-        }
-
-
-if (HTMLTabObject.hasAttribute("muted"))
-{
-    browser.menus.update("Unmute", { visible: true });
-}
-
-if (HTMLTabObject.hasAttribute("soundplaying"))
-{
-    browser.menus.update("Mute", { visible: true });
-}
-
-if (HTMLTabObject.hasAttribute("pinned"))
-{
-    browser.menus.update("Unpin", { visible: true });
-}
-
-if (HTMLTabObject.hasAttribute("pinned") == false)
-{
-    browser.menus.update("Pin", { visible: true });
-}
-
-browser.menus.refresh();
-
-
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        case "Discard":
+            browser.tabs.discard(HTMLTabObjectId);
+            break;
+    }
+});
 
 /* ---------- External Events ---------- */
 

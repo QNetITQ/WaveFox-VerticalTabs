@@ -4,22 +4,8 @@
     background-color: -moz-Dialog;
     color: -moz-DialogText;
 
-    --toolbar-bgcolor: field;
-    --toolbar-color: fieldtext;
-    --toolbarbutton-icon-fill: currentColor;
     --toolbarbutton-hover-background: color-mix(in srgb, currentColor 10%, transparent);
     --toolbarbutton-active-background: color-mix(in srgb, currentColor 20%, transparent);
-
-    -moz-context-properties: fill, stroke;
-
-    font-size: 12px;
-    line-height: 36px;
-}
-
-:root:-moz-window-inactive
-{
-    background-color InActiveCaption;
-    color InActiveCaptionText;
 }
 
 /* ------------------------------------------------------ */
@@ -33,16 +19,29 @@
 
 #RegularContainer
 {
-    width: 100%;
+    flex-basis: 100%;
 }
 
 /* ------------------------------------------------------ */
+
+.tabbrowser-tab[pinned] :is(.tab-label-container, .tab-close-button)
+{
+    display: none;
+}
+
+.tab-stack
+{
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: auto;
+    pointer-events: none;
+}
 
 .tabbrowser-tab[visuallyselected] .tab-background
 {
     background-color: Field;
     color: FieldText;
-    box-shadow: 0 2px 4px light-dark(rgba(0,0,0,0.25), rgba(0,0,0,0.75)), inset -2px 0 0 var(--identity-icon-color, transparent);
+    box-shadow: 0 2px 4px light-dark(rgba(0,0,0,0.25), rgba(0,0,0,0.75));
 }
 
 .tabbrowser-tab:not([visuallyselected]):hover .tab-background
@@ -52,21 +51,18 @@
 
 .tab-background
 {
+    grid-area: 1 / 1 / span 1 / span 1;
+    min-height: 36px;
     border-radius: 4px;
-    pointer-events: none;
-    box-shadow: inset -2px 0 0 var(--identity-icon-color, transparent);
 }
-
-/* ------------------------------------------------------- */
 
 .tab-content
 {
+    grid-area: 1 / 1 / span 1 / span 1;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    min-height: 36px;
-    max-height: 36px;
     padding-inline: 10px;
 }
 
@@ -76,8 +72,6 @@
 {
     display: grid;
     grid-template: auto / auto;
-    min-width: 16px;
-    min-height: 16px;
 
     > *
     {
@@ -88,39 +82,19 @@
     }
 }
 
-.tabbrowser-tab[loading] .tab-throbber
-{
-    display: block;
-    background-image: radial-gradient(circle at center, dodgerblue 2px, transparent 2px);
-    background-size: 4px 4px;
-    background-position: left center;
-    background-repeat: no-repeat;
-    animation: tab-throbber-animation 1s infinite;
-}
-
-@keyframes tab-throbber-animation
-{
-    0%   { transform: translateX(0px);  }
-    50%  { transform: translateX(12px); }
-    100% { transform: translateX(0px);  }
-}
-
 .tabbrowser-tab:not([pinned]) .tab-icon-stack
 {
     margin-inline-end: 8px;
 }
 
-.tab-icon-overlay
+.tabbrowser-tab[loading] .tab-throbber
 {
-    &:hover
-    {
-        background-color: var(--toolbarbutton-hover-background);
-    }
-
-    &:hover:active
-    {
-        background-color: var(--toolbarbutton-active-background);
-    }
+    display: block;
+    background-color: currentColor;
+    mask-image: url("icons/hourglass.svg");
+    mask-size: 16px 16px;
+    mask-position: left center;
+    mask-repeat: no-repeat;
 }
 
 .tabbrowser-tab:not([loading]) .tab-icon-image
@@ -136,63 +110,75 @@
     mask-position: left top;
 }
 
-.tabbrowser-tab[soundplaying] .tab-icon-overlay
+.tabbrowser-tab[discarded] .tab-icon-image
+{
+    filter: saturate(0) !important;
+}
+
+.tabbrowser-tab:is([soundplaying], [muted]):not([loading]) .tab-overlay
 {
     display: block;
     position: absolute;
     border-radius: 50%;
     margin-left: 8px;
     margin-top: -8px;
-    background-image: url("icons/tab-audio-playing-small.svg");
-    fill: var(--toolbarbutton-icon-fill);
-    background-size: 12px 12px;
-    background-position: center center;
-    background-repeat: no-repeat;
-stroke: transparent;
-pointer-events: auto;
+    pointer-events: auto;
+
+    &:hover
+    {
+        background-color: var(--toolbarbutton-hover-background);
+    }
+
+    &:hover:active
+    {
+        background-color: var(--toolbarbutton-active-background);
+    }
+}
+
+.tabbrowser-tab[soundplaying] .tab-icon-overlay
+{
+    width: 16px;
+    height: 16px;
+    background-color: currentColor;
+    mask-image: url("icons/tab-audio-playing-small.svg");
+    mask-size: 12px 12px;
+    mask-position: center center;
+    mask-repeat: no-repeat;
 }
 
 .tabbrowser-tab[muted] .tab-icon-overlay
 {
-    display: block;
-    position: absolute;
-    border-radius: 50%;
-    margin-left: 8px;
-    margin-top: -8px;
-    background-image: url("icons/tab-audio-muted-small.svg");
-    fill: var(--toolbarbutton-icon-fill);
-    background-size: 12px 12px;
-    background-position: center center;
-    background-repeat: no-repeat;
-stroke: transparent;
-pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    background-color: currentColor;
+    mask-image: url("icons/tab-audio-muted-small.svg");
+    mask-size: 12px 12px;
+    mask-position: center center;
+    mask-repeat: no-repeat;
 }
 
 /* ------------------------------------------------- */
 
 .tab-label-container
 {
+    display: grid;
+    grid-template: auto / auto;
     width: 100%;
-    min-height: 36px;
-    max-height: 36px;
-    overflow: hidden;
-    pointer-events: none;
 }
 
-/* ------------------------------------------ */
+.tab-lable
+{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-family: system-ui;
+    font-size: 12px;
+}
 
 .tab-close-button
 {
-    min-width: 16px;
-    min-height: 16px;
-    background-image: url("icons/close-12.svg");
-    background-size: 12px 12px;
-    background-position: center center;
-    background-repeat: no-repeat;
     border-radius: 50%;
-    fill: currentColor;
-    margin-inline-start: 8px;
-pointer-events: auto;
+    pointer-events: auto;
 
     &:hover
     {
@@ -203,55 +189,24 @@ pointer-events: auto;
     {
         background-color: var(--toolbarbutton-active-background);
     }
-
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Pinned Tabs */
-
-.tabbrowser-tab[pinned] :is(.tab-label-container, .tab-close-button)
+.tab-close-button-icon
 {
-    display: none;
+    width: 16px;
+    height: 16px;
+    background-color: currentColor;
+    mask-image: url("icons/close-12.svg");
+    mask-size: 12px 12px;
+    mask-position: center center;
+    mask-repeat: no-repeat no-repeat;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ----------------------------------------------------- */
 
 #NewTabButton
 {
-    height: 36px;
-    background-image: url("icons/plus.svg");
-    background-size: 16px 16px;
-    background-position: center center;
-    background-repeat: no-repeat;
     border-radius: 4px;
-    fill: var(--toolbarbutton-icon-fill);
 
     &:hover
     {
@@ -262,4 +217,14 @@ pointer-events: auto;
     {
         background-color: var(--toolbarbutton-active-background);
     }
+}
+
+#NewTabButtonIcon
+{
+    height: 36px;
+    background-color: currentColor;
+    mask-image: url("icons/plus.svg");
+    mask-size: 16px 16px;
+    mask-position: center center;
+    mask-repeat: no-repeat no-repeat;
 }
