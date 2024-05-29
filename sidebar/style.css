@@ -51,9 +51,23 @@
 
 .tab-background
 {
+    display: grid;
+    grid-template: auto / auto;
     grid-area: 1 / 1 / span 1 / span 1;
     min-height: 36px;
     border-radius: 4px;
+}
+
+.tab-context-line
+{
+    grid-area: 1 / 1 / span 1 / span 1;
+    box-shadow: inset 2px 0 0 var(--identity-icon-color);
+    border-radius: 4px;
+}
+
+.tab-loading-burst
+{
+    grid-area: 1 / 1 / span 1 / span 1;
 }
 
 .tab-content

@@ -10,6 +10,8 @@ async function TabList()
 {
     let JsTabObjects = await browser.tabs.query({ currentWindow: true });
 
+    let AllContexts = await browser.contextualIdentities.query({});
+
     let PinnedTabsVirtualDOM = document.createDocumentFragment();
     let RegularTabsVirtualDOM = document.createDocumentFragment();
 
@@ -204,6 +206,16 @@ async function TabList()
                 e.preventDefault();
             });
         });
+
+        /* ---------- Containers ---------- */
+
+        for (let Context of AllContexts)
+        {
+            if (JsTabObject.cookieStoreId == Context.cookieStoreId)
+            {
+                HTMLTabContextLine.style.setProperty("--identity-icon-color", Context.colorCode);
+            }
+        }
     }
 
     HTMLPinnedTabContainer.appendChild(PinnedTabsVirtualDOM);
