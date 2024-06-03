@@ -229,105 +229,130 @@ HTMLNewTabButton.addEventListener("click", (e) =>
     browser.tabs.create({});
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ---------- Menu ---------- */
 
-browser.menus.onShown.addListener((info, tab) =>
+document.addEventListener("contextmenu", (e) =>
 {
-    browser.menus.create(
-    {
-        id: "New",
-        title: "New tab"
-    });
+    browser.menus.overrideContext({ showDefaults: false });
 
-    browser.menus.create(
+    browser.menus.onShown.addListener((info, tab) =>
     {
-        id: "separator-1",
-        type: "separator"
-    });
+        let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
 
-    browser.menus.create(
-    {
-        id: "Refresh",
-        title: "Refresh tab",
-        type: "normal"
-    });
+        if (e.target.classList.contains("tabbrowser-tab") == false)
+        {
+            browser.menus.create(
+            {
+                id: "New",
+                title: "New tab",
+                type: "normal"
+            });
+        }
 
-    browser.menus.create(
-    {
-        id: "Mute",
-        title: "Mute sound",
-        type: "normal"
-    });
+        else
+        {
+            browser.menus.create(
+            {
+                id: "New",
+                title: "New tab",
+                type: "normal"
+            });
 
-    browser.menus.create(
-    {
-        id: "Unmute",
-        title: "Unmute sound",
-        type: "normal"
-    });
+            browser.menus.create(
+            {
+                id: "separator-1",
+                type: "separator"
+            });
 
-    browser.menus.create(
-    {
-        id: "Pin",
-        title: "Pin tab",
-        type: "normal"
-    });
+            if (HTMLTabObject.hasAttribute("muted") == false)
+            {
+                browser.menus.create(
+                {
+                    id: "Mute",
+                    title: "Mute sound",
+                    type: "normal"
+                });
+            }
 
-    browser.menus.create(
-    {
-        id: "Unpin",
-        title: "Unpin tab",
-        type: "normal"
-    });
+            if (HTMLTabObject.hasAttribute("muted"))
+            {
+                browser.menus.create(
+                {
+                    id: "Unmute",
+                    title: "Unmute sound",
+                    type: "normal"
+                });
+            }
 
-    browser.menus.create(
-    {
-        id: "Duplicate",
-        title: "Duplicate tab",
-        type: "normal"
-    });
+            if (HTMLTabObject.hasAttribute("pinned") == false)
+            {
+                browser.menus.create(
+                {
+                    id: "Pin",
+                    title: "Pin tab",
+                    type: "normal"
+                });
+            }
 
-    browser.menus.create(
-    {
-        id: "separator-2",
-        type: "separator"
-    });
+            if (HTMLTabObject.hasAttribute("pinned"))
+            {
+                browser.menus.create(
+                {
+                    id: "Unpin",
+                    title: "Unpin tab",
+                    type: "normal"
+                });
+            }
 
-    browser.menus.create(
-    {
-        id: "Close",
-        title: "Close tab",
-        type: "normal"
-    });
+            browser.menus.create(
+            {
+                id: "separator-2",
+                type: "separator"
+            });
 
-    browser.menus.create(
-    {
-        id: "separator-3",
-        type: "separator"
-    });
+            browser.menus.create(
+            {
+                id: "Refresh",
+                title: "Refresh tab",
+                type: "normal"
+            });
 
-    browser.menus.create(
-    {
-        id: "Discard",
-        title: "Discard tab",
-        type: "normal"
+            browser.menus.create(
+            {
+                id: "Duplicate",
+                title: "Duplicate tab",
+                type: "normal"
+            });
+
+            browser.menus.create(
+            {
+                id: "separator-3",
+                type: "separator"
+            });
+
+            browser.menus.create(
+            {
+                id: "Discard",
+                title: "Discard tab",
+                type: "normal"
+            });
+
+            browser.menus.create(
+            {
+                id: "separator-4",
+                type: "separator"
+            });
+
+            browser.menus.create(
+            {
+                id: "Close",
+                title: "Close tab",
+                type: "normal"
+            });
+        }
+
+        browser.menus.refresh();
+        browser.menus.removeAll();
     });
 });
 
