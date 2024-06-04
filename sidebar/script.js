@@ -231,129 +231,138 @@ HTMLNewTabButton.addEventListener("click", (e) =>
 
 /* ---------- Menu ---------- */
 
-document.addEventListener("contextmenu", (e) =>
+document.addEventListener("contextmenu", () =>
 {
     browser.menus.overrideContext({ showDefaults: false });
+});
 
-    browser.menus.onShown.addListener((info, tab) =>
+browser.menus.onShown.addListener((info, tab) =>
+{
+    let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
+
+    browser.menus.create(
     {
-        let HTMLTabObject = browser.menus.getTargetElement(info.targetElementId);
-
-        if (e.target.classList.contains("tabbrowser-tab") == false)
-        {
-            browser.menus.create(
-            {
-                id: "New",
-                title: "New tab",
-                type: "normal"
-            });
-        }
-
-        else
-        {
-            browser.menus.create(
-            {
-                id: "New",
-                title: "New tab",
-                type: "normal"
-            });
-
-            browser.menus.create(
-            {
-                id: "separator-1",
-                type: "separator"
-            });
-
-            if (HTMLTabObject.hasAttribute("muted") == false)
-            {
-                browser.menus.create(
-                {
-                    id: "Mute",
-                    title: "Mute sound",
-                    type: "normal"
-                });
-            }
-
-            if (HTMLTabObject.hasAttribute("muted"))
-            {
-                browser.menus.create(
-                {
-                    id: "Unmute",
-                    title: "Unmute sound",
-                    type: "normal"
-                });
-            }
-
-            if (HTMLTabObject.hasAttribute("pinned") == false)
-            {
-                browser.menus.create(
-                {
-                    id: "Pin",
-                    title: "Pin tab",
-                    type: "normal"
-                });
-            }
-
-            if (HTMLTabObject.hasAttribute("pinned"))
-            {
-                browser.menus.create(
-                {
-                    id: "Unpin",
-                    title: "Unpin tab",
-                    type: "normal"
-                });
-            }
-
-            browser.menus.create(
-            {
-                id: "separator-2",
-                type: "separator"
-            });
-
-            browser.menus.create(
-            {
-                id: "Refresh",
-                title: "Refresh tab",
-                type: "normal"
-            });
-
-            browser.menus.create(
-            {
-                id: "Duplicate",
-                title: "Duplicate tab",
-                type: "normal"
-            });
-
-            browser.menus.create(
-            {
-                id: "separator-3",
-                type: "separator"
-            });
-
-            browser.menus.create(
-            {
-                id: "Discard",
-                title: "Discard tab",
-                type: "normal"
-            });
-
-            browser.menus.create(
-            {
-                id: "separator-4",
-                type: "separator"
-            });
-
-            browser.menus.create(
-            {
-                id: "Close",
-                title: "Close tab",
-                type: "normal"
-            });
-        }
-
-        browser.menus.refresh();
-        browser.menus.removeAll();
+        id: "New",
+        title: "New tab",
+        type: "normal"
     });
+
+    browser.menus.create(
+    {
+        id: "separator-1",
+        type: "separator"
+    });
+
+    browser.menus.create(
+    {
+        id: "Mute",
+        title: "Mute sound",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "Unmute",
+        title: "Unmute sound",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "Pin",
+        title: "Pin tab",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "Unpin",
+        title: "Unpin tab",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "separator-2",
+        type: "separator"
+    });
+
+    browser.menus.create(
+    {
+        id: "Refresh",
+        title: "Refresh tab",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "Duplicate",
+        title: "Duplicate tab",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "separator-3",
+        type: "separator"
+    });
+
+    browser.menus.create(
+    {
+        id: "Discard",
+        title: "Discard tab",
+        type: "normal"
+    });
+
+    browser.menus.create(
+    {
+        id: "separator-4",
+        type: "separator"
+    });
+
+    browser.menus.create(
+    {
+        id: "Close",
+        title: "Close tab",
+        type: "normal"
+    });
+
+    if (HTMLTabObject.hasAttribute("muted") == false)
+    {
+        browser.menus.update("Unmute", { visible: false });
+    }
+
+    else
+    {
+        browser.menus.update("Mute", { visible: false });
+        browser.menus.update("Unmute", { visible: true });
+    }
+
+    if (HTMLTabObject.hasAttribute("pinned") == false)
+    {
+        browser.menus.update("Unpin", { visible: false });
+    }
+
+    else
+    {
+        browser.menus.update("Pin", { visible: false });
+        browser.menus.update("Unpin", { visible: true });
+    }
+
+    if (HTMLTabObject.classList.contains("tabbrowser-tab") == false)
+    {
+        browser.menus.update("Mute", { visible: false });
+        browser.menus.update("Unmute", { visible: false });
+        browser.menus.update("Pin", { visible: false });
+        browser.menus.update("Unpin", { visible: false });
+        browser.menus.update("Refresh", { visible: false });
+        browser.menus.update("Duplicate", { visible: false });
+        browser.menus.update("Discard", { visible: false });
+        browser.menus.update("Close", { visible: false });
+    }
+
+    browser.menus.refresh();
+    browser.menus.removeAll();
 });
 
 browser.menus.onClicked.addListener((info, tab) =>
